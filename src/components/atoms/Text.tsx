@@ -7,10 +7,11 @@ type TextProps = {
 };
 
 const Text: FC<TextProps> = ({ size, weight, color, children }) => {
+  console.log("color =", color);
   const textStyle = {
-    fontSize: size ?? "",
-    fontWeight: weight ?? undefined,
-    color: color ?? "",
+    fontSize: size,
+    fontWeight: weight,
+    color: color,
   };
 
   return <div style={textStyle}>{children}</div>;

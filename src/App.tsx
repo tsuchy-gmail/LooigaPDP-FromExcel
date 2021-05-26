@@ -6,19 +6,21 @@ import Text from "./components/atoms/Text";
 import TextField from "./components/atoms/TextField";
 import Button from "./components/atoms/Button";
 import Icon from "./components/atoms/Icon";
+import IconText from "./components/molecules/IconText";
+import { secondary } from "./utils/colors";
+import DatePicker from "./components/atoms/DatePicker";
+import TimePicker from "./components/atoms/TimePicker";
+import CarrierSettingsRow from "./components/molecules/CarrierMainSettings";
 
 function App() {
-  const [text, setText] = useState("initial");
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value);
-  };
+  const [date, setDate] = useState(new Date());
+
   return (
-    <div className="App">
+    <div className="App" style={{ background: "#F4F5F6" }}>
       <img src={logo} className="App-logo" alt="logo" />
       <div>
         <b>Hello, TypeScript!</b>
       </div>
-      <input type="text" value={text} onChange={handleChange} />
       <Select
         items={[1, 2, 3, 4, 5]}
         helper="heloperだYO!"
@@ -39,6 +41,18 @@ function App() {
       <Button>
         <Icon size="50px" color="secondary" />
       </Button>
+      <IconText
+        type="NearMe"
+        color={secondary}
+        marginRight="30px"
+        iconSize="50px"
+        textSize="30px"
+        weight={700}
+      >
+        IconText
+      </IconText>
+      <DatePicker weight={700} />
+      <TimePicker size="30px" />
     </div>
   );
 }

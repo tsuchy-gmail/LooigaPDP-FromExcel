@@ -1,13 +1,14 @@
 import React, { VFC } from "react";
 import { TextField } from "@material-ui/core";
 
-type TextFieldProps = {
+export type TextFieldProps = {
   width?: number;
   label?: string;
   helper?: string;
   size?: string;
   weight?: number;
   end?: string;
+  type?: string;
 };
 
 const MyTextField: VFC<TextFieldProps> = ({
@@ -17,10 +18,12 @@ const MyTextField: VFC<TextFieldProps> = ({
   size,
   weight,
   end,
+  type,
 }) => {
   const textFieldStyle = {
     width,
   };
+
   const inputProps = {
     style: {
       fontSize: size,
@@ -28,13 +31,17 @@ const MyTextField: VFC<TextFieldProps> = ({
     },
     endAdornment: end,
   };
+
   return (
-    <TextField
-      style={textFieldStyle}
-      label={label}
-      helperText={helper}
-      InputProps={inputProps}
-    />
+    <div>
+      <TextField
+        style={textFieldStyle}
+        label={label}
+        helperText={helper}
+        InputProps={inputProps}
+        type={type}
+      />
+    </div>
   );
 };
 
