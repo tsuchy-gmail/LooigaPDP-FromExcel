@@ -35,7 +35,7 @@ const IconText: React.FC<IconTextProps> = ({
     <Wrapper marginRight={marginRight} color={color}>
       <Icon type={type} size={iconSize} />
       <Text size={textSize} weight={weight}>
-        {children}
+        {children ?? "Apple"}
       </Text>
     </Wrapper>
   );

@@ -11,6 +11,7 @@ import { secondary } from "./utils/colors";
 import DatePicker from "./components/atoms/DatePicker";
 import TimePicker from "./components/atoms/TimePicker";
 import CarrierMainSettingsRow from "./components/molecules/CarrierMainSettings";
+import SubtitleWithText from "./components/molecules/SubtitleWithText";
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -29,6 +30,7 @@ function App() {
         size="23px"
         weight={700}
       />
+      <SubtitleWithText />
       <Text weight={700} color={"blue"}>
         Text!
       </Text>

@@ -2,12 +2,13 @@ import React, { VFC } from "react";
 import { TextField } from "@material-ui/core";
 
 export type TextFieldProps = {
-  width?: number;
+  width?: number | string;
   label?: string;
   helper?: string;
   size?: string;
   weight?: number;
   end?: string;
+  placeholder?: string;
   type?: string;
   shrink?: boolean;
 };
@@ -19,6 +20,7 @@ const MyTextField: VFC<TextFieldProps> = ({
   size,
   weight,
   end,
+  placeholder,
   type,
   shrink,
 }) => {
@@ -46,6 +48,7 @@ const MyTextField: VFC<TextFieldProps> = ({
         helperText={helper}
         InputProps={inputProps}
         InputLabelProps={inputLabelProps}
+        placeholder={placeholder}
         type={type}
       />
     </div>
