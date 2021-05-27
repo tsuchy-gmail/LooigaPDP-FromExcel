@@ -30,16 +30,18 @@ const MySelect: VFC<SelectPrps> = ({
     fontWeight: weight,
   };
   return (
-    <FormControl>
-      {label && <InputLabel>{label}</InputLabel>}
-      <Select style={selectStyle}>
-        <MenuItem>-</MenuItem>
-        {items.map((item, index) => (
-          <MenuItem value={index}>{item}</MenuItem>
-        ))}
-      </Select>
-      {helper && <FormHelperText>{helper}</FormHelperText>}
-    </FormControl>
+    <div>
+      <FormControl>
+        {label && <InputLabel>{label}</InputLabel>}
+        <Select style={selectStyle}>
+          <MenuItem>-</MenuItem>
+          {items.map((item, index) => (
+            <MenuItem value={index}>{item}</MenuItem>
+          ))}
+        </Select>
+        {helper && <FormHelperText>{helper}</FormHelperText>}
+      </FormControl>
+    </div>
   );
 };
 

@@ -9,6 +9,7 @@ export type TextFieldProps = {
   weight?: number;
   end?: string;
   type?: string;
+  shrink?: boolean;
 };
 
 const MyTextField: VFC<TextFieldProps> = ({
@@ -19,6 +20,7 @@ const MyTextField: VFC<TextFieldProps> = ({
   weight,
   end,
   type,
+  shrink,
 }) => {
   const textFieldStyle = {
     width,
@@ -32,6 +34,10 @@ const MyTextField: VFC<TextFieldProps> = ({
     endAdornment: end,
   };
 
+  const inputLabelProps = {
+    shrink: shrink,
+  };
+
   return (
     <div>
       <TextField
@@ -39,6 +45,7 @@ const MyTextField: VFC<TextFieldProps> = ({
         label={label}
         helperText={helper}
         InputProps={inputProps}
+        InputLabelProps={inputLabelProps}
         type={type}
       />
     </div>

@@ -10,13 +10,13 @@ import IconText from "./components/molecules/IconText";
 import { secondary } from "./utils/colors";
 import DatePicker from "./components/atoms/DatePicker";
 import TimePicker from "./components/atoms/TimePicker";
-import CarrierSettingsRow from "./components/molecules/CarrierMainSettings";
+import CarrierMainSettingsRow from "./components/molecules/CarrierMainSettings";
 
 function App() {
   const [date, setDate] = useState(new Date());
 
   return (
-    <div className="App" style={{ background: "#F4F5F6" }}>
+    <div style={{ background: "#F4F5F6" }}>
       <img src={logo} className="App-logo" alt="logo" />
       <div>
         <b>Hello, TypeScript!</b>
@@ -32,6 +32,9 @@ function App() {
       <Text weight={700} color={"blue"}>
         Text!
       </Text>
+      <CarrierMainSettingsRow />
+      <CarrierMainSettingsRow />
+      <CarrierMainSettingsRow />
       <TextField end="(min)" size="20px" weight={700} />
       <Button variant="contained" color="secondary" width={500} height={200}>
         <Text size="20px" weight={700}>
