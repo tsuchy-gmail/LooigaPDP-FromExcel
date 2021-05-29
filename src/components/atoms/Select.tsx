@@ -8,8 +8,8 @@ import {
 } from "@material-ui/core";
 
 type SelectPrps = {
-  items: (string | number)[];
-  width?: number;
+  items?: (string | number)[];
+  width?: number | string;
   label?: string;
   helper?: string;
   size?: string;
@@ -31,15 +31,16 @@ const MySelect: VFC<SelectPrps> = ({
   };
   return (
     <div>
-      <FormControl>
+      <FormControl style={selectStyle}>
         {label && <InputLabel>{label}</InputLabel>}
-        <Select style={selectStyle}>
+        <Select>
           <MenuItem>-</MenuItem>
-          {items.map((item, index) => (
-            <MenuItem key={index} value={index}>
-              {item}
-            </MenuItem>
-          ))}
+          {items &&
+            items.map((item, index) => (
+              <MenuItem key={index} value={index}>
+                {item}
+              </MenuItem>
+            ))}
         </Select>
         {helper && <FormHelperText>{helper}</FormHelperText>}
       </FormControl>

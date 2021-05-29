@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-import Button from "../atoms/Button";
 import TextField from "../atoms/TextField";
 import IconText from "./IconText";
 
@@ -19,21 +18,26 @@ const Wrapper = styled.div`
 
 type SubtitleWithTextProps = {
   type?: string;
+  subtitle?: string;
   iconSize?: string;
   placeholder?: string;
 };
 
-const SubtitleWithText: React.FC<SubtitleWithTextProps> = ({
+const SubtitleWithText: React.VFC<SubtitleWithTextProps> = ({
   type,
+  subtitle,
   iconSize,
   placeholder,
-  children,
 }) => {
   return (
     <Wrapper>
-      <IconText type={type} iconSize={iconSize} textSize="18px" weight={700}>
-        {children}
-      </IconText>
+      <IconText
+        type={type}
+        iconSize={iconSize}
+        textSize="18px"
+        weight={700}
+        text={subtitle}
+      />
       <TextField
         width="100%"
         size="16px"

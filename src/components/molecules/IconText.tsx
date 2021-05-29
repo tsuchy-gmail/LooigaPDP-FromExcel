@@ -6,6 +6,7 @@ import Text from "../atoms/Text";
 
 type IconTextProps = {
   type?: string;
+  text?: string;
   marginRight?: string;
   weight?: number;
   iconSize?: string;
@@ -29,13 +30,13 @@ const IconText: React.FC<IconTextProps> = ({
   iconSize,
   textSize,
   weight,
-  children,
+  text,
 }) => {
   return (
     <Wrapper marginRight={marginRight} color={color}>
       <Icon type={type} size={iconSize} />
       <Text size={textSize} weight={weight}>
-        {children ?? "Apple"}
+        {text ?? "Apple"}
       </Text>
     </Wrapper>
   );

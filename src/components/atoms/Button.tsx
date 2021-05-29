@@ -1,38 +1,42 @@
 import React, { FC } from "react";
-import { Button } from "@material-ui/core";
+import MuiButton from "@material-ui/core/Button";
 
-type ButtonProps = {
-  width?: number;
-  height?: number;
-  color?: "primary" | "secondary";
+export type ButtonProps = {
+  width?: string | number;
+  height?: string | number;
+  color?: string;
   variant?: "contained" | "outlined";
+  onClick?: () => void
 };
 
 type ButtonStyle = {
-  width?: number;
-  height?: number;
+  width?: string | number;
+  height?: string | number;
+  color?: string;
   textTransform: "none";
 };
 
-const MyButton: FC<ButtonProps> = ({
+const Button: FC<ButtonProps> = ({
   width,
   height,
   color,
   variant,
   children,
+  onClick,
 }) => {
   const buttonStyle: ButtonStyle = {
     width,
     height,
+    color,
     textTransform: "none",
   };
   return (
     <div>
-      <Button style={buttonStyle} color={color} variant={variant}>
-        {children}
-      </Button>
+      <MuiButton onClick={onClick} style={buttonStyle} variant={variant}>
+         {children}
+      </MuiButton>
     </div>
   );
 };
 
-export default MyButton;
+export default Button;
