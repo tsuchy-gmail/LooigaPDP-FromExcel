@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Icon from "../atoms/Icon";
 import Text from "../atoms/Text";
 
-type IconTextProps = {
+export type IconTextProps = {
   type?: string;
   text?: string;
   marginRight?: string;

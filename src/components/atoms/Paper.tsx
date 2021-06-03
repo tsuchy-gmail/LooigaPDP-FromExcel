@@ -12,13 +12,15 @@ const Paper: React.FC<Partial<PaperProps & React.CSSProperties>> = ({
   ...styleProps
 }) => {
   const paperStyle = {
-    padding: "30px",
+    padding: "50px 30px",
+    width: "93%",
+    margin: "0 auto",
     ...styleProps,
   };
 
   return (
     <div>
-      <MuiPaper elevation={elevation ?? 3} style={paperStyle}>
+      <MuiPaper elevation={elevation ?? 0} style={paperStyle} square>
         {children}
       </MuiPaper>
     </div>

@@ -73,7 +73,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({ deleteRow }) => {
           scale={1.3}
         />
       </CheckCircleWrapper>
-      <Paper minWidth="710px">
+      <Paper minWidth="710px" elevation={3}>
         <MainSettingsWrapper>
           <Select
             items={carrierCountOptions}

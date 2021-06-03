@@ -21,6 +21,7 @@ const DialogButton: React.FC<DialogButtonProps> = ({
   width,
   height,
   color,
+  background,
   title,
   buttonContent,
   actionText,
@@ -39,13 +40,14 @@ const DialogButton: React.FC<DialogButtonProps> = ({
       <Button
         variant={variant ?? "outlined"}
         color={color}
+        background={background}
         width={width}
         height={height}
         onClick={handleClickOpen}
       >
         {buttonContent ?? "Open Dialog"}
       </Button>
-      <Dialog open={isDialogOpen} onClose={handleClickClose} maxWidth='xl'>
+      <Dialog open={isDialogOpen} onClose={handleClickClose} maxWidth="xl">
         <DialogTitle>{title ?? "Title"}</DialogTitle>
         <DialogContent>{children}</DialogContent>
         <DialogActions>

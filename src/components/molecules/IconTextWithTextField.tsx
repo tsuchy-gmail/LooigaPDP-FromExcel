@@ -29,7 +29,7 @@ const IconTextWithTextField: React.VFC<IconTextWithTextFieldProps> = ({
   ...iconTextProps
 }) => {
   return (
-    <Paper width="93%" maxWidth="1600px" margin="0 auto">
+    <Paper>
       <Wrapper>
         <IconText textSize="18px" {...iconTextProps} />
         <TextField size="16px" placeholder={placeholder} />

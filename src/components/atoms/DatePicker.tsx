@@ -11,9 +11,15 @@ type DatePickerProps = {
   size?: string;
   weight?: number;
   color?: string;
+  label?: string;
 };
 
-const MyDatePicker: React.VFC<DatePickerProps> = ({ size, weight, color }) => {
+const MyDatePicker: React.VFC<DatePickerProps> = ({
+  size,
+  weight,
+  color,
+  label,
+}) => {
   const now = new Date();
   const [value, setValue] = React.useState(now);
   const handleChange = (date: any) => {
@@ -21,9 +27,6 @@ const MyDatePicker: React.VFC<DatePickerProps> = ({ size, weight, color }) => {
   };
   const onlyDate = value.toISOString().substr(0, 11); //2021-05-26T
 
-  const dateStyle = {
-    width: 200,
-  };
   const inputProps = {
     style: {
       fontSize: size,
@@ -35,9 +38,9 @@ const MyDatePicker: React.VFC<DatePickerProps> = ({ size, weight, color }) => {
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <KeyboardDatePicker
-        style={dateStyle}
         disableToolbar
         variant="inline"
+        label={label}
         value={value}
         onChange={handleChange}
         format="yyyy-MM-dd"

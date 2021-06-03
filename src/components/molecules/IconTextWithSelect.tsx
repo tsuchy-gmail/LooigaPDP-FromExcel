@@ -46,7 +46,7 @@ const IconTextWithSelect: React.VFC<Partial<IconTextWithSelectProps>> = ({
   items,
 }) => {
   return (
-    <Paper width="93%" maxWidth="1600px" margin="0 auto">
+    <Paper>
       <Wrapper>
         <UpperSideWrapper>
           <IconText type={type} text={text} textSize="18px" />

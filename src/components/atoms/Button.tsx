@@ -5,14 +5,17 @@ export type ButtonProps = {
   width?: string | number;
   height?: string | number;
   color?: string;
+  background?: string;
   variant?: "contained" | "outlined";
-  onClick?: () => void
+  onClick?: () => void;
+  component?: string;
 };
 
 type ButtonStyle = {
   width?: string | number;
   height?: string | number;
   color?: string;
+  background?: string;
   textTransform: "none";
 };
 
@@ -20,20 +23,21 @@ const Button: FC<ButtonProps> = ({
   width,
   height,
   color,
-  variant,
+  background,
   children,
-  onClick,
+  ...buttonProps
 }) => {
   const buttonStyle: ButtonStyle = {
-    width,
+    width: width ?? "100%",
     height,
     color,
+    background,
     textTransform: "none",
   };
   return (
     <div>
-      <MuiButton onClick={onClick} style={buttonStyle} variant={variant}>
-         {children}
+      <MuiButton style={buttonStyle} {...buttonProps}>
+        {children}
       </MuiButton>
     </div>
   );
