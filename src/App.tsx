@@ -5,14 +5,24 @@ import Text from "./components/atoms/Text";
 import TextField from "./components/atoms/TextField";
 import Button from "./components/atoms/Button";
 import Icon from "./components/atoms/Icon";
+import IconText from "./components/molecules/IconText";
 import { secondary } from "./utils/colors";
-import CarrierMainSettingsRow from "./components/molecules/CarrierMainSettings";
-import SubtitleWithText from "./components/molecules/SubtitleWithText";
+import CarrierSettingsRow from "./components/molecules/CarrierSettingsRow";
 import styled from "styled-components";
-import SubtitleWithSelect from "./components/molecules/SubtitleWithSelect";
+import SubtitleWithSelect from "./components/molecules/IconTextWithSelect";
 import InputFile from "./components/atoms/InputFile";
 import Checkbox from "./components/atoms/Checkbox";
-import DialogButton from "./components/atoms/DialogWithText";
+import DialogButton from "./components/atoms/DialogButton";
+import CarriersSettings from "./components/organisms/CarriersSettings";
+import CheckboxWithText from "./components/molecules/CheckboxWithText";
+import Paper from "./components/atoms/Paper";
+import MuiPaper from "@material-ui/core/Paper";
+import Fab from "@material-ui/core/Fab";
+import DatePicker from "./components/atoms/DatePicker";
+
+import ProjectName from "./components/organisms/ProjectName";
+import Depots from "./components/organisms/Depots";
+import Organizations from "./components/organisms/Organizations";
 
 function App() {
   const [date, setDate] = useState(new Date());
@@ -33,26 +43,12 @@ function App() {
 
   return (
     <div style={{ background: "#F4F5F6" }}>
-      <input type="checkbox" checked={checked} onChange={handleChange} />
+      <ProjectName />
+      <Depots />
+      <Organizations />
       <img src={logo} className="App-logo" alt="logo" />
-      <DialogButton actionText="デポを登録">
-        <TextField width={800} />
-      </DialogButton>
-
-      <Checkbox />
-      <div>
-        <b>Hello, TypeScript!</b>
-      </div>
-      <InputFile id="test">fo!</InputFile>
-      <CarrierMainSettingsRow />
-      <TextField end="(min)" size="20px" weight={700} />
-      <SubtitleWithSelect />
-      <Button variant="contained" color={secondary} width={500} height={200}>
-        <Text size="20px" weight={700}>
-          Buttonの中のText
-        </Text>
-      </Button>
-      <SubtitleWithText />
+      <DatePicker />
+      <CarriersSettings />
     </div>
   );
 }

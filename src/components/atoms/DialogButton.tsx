@@ -45,7 +45,7 @@ const DialogButton: React.FC<DialogButtonProps> = ({
       >
         {buttonContent ?? "Open Dialog"}
       </Button>
-      <Dialog open={isDialogOpen} onClose={handleClickClose}>
+      <Dialog open={isDialogOpen} onClose={handleClickClose} maxWidth='xl'>
         <DialogTitle>{title ?? "Title"}</DialogTitle>
         <DialogContent>{children}</DialogContent>
         <DialogActions>

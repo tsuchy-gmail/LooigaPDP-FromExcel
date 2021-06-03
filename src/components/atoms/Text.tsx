@@ -1,6 +1,6 @@
 import React, { VFC, FC } from "react";
 
-type TextProps = {
+export type TextProps = {
   size?: string;
   weight?: number;
   color?: string;
@@ -9,11 +9,11 @@ type TextProps = {
 const Text: FC<TextProps> = ({ size, weight, color, children }) => {
   const textStyle = {
     fontSize: size,
-    fontWeight: weight,
+    fontWeight: 700,
     color: color,
   };
 
-  return <div style={textStyle}>{children}</div>;
+  return <div style={{ fontWeight: 700 }}>{children}</div>;
 };
 
 export default Text;

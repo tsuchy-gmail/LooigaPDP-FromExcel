@@ -24,16 +24,20 @@ const MySelect: VFC<SelectPrps> = ({
   size,
   weight,
 }) => {
-  const selectStyle = {
-    width: width,
-    fontSize: size,
-    fontWeight: weight,
+  const formControlStyle = {
+    width: width ?? "100%",
   };
+
+  const selectStyle = {
+    fontSize: size,
+    fontWeight: weight ?? 700,
+  };
+
   return (
     <div>
-      <FormControl style={selectStyle}>
+      <FormControl style={formControlStyle}>
         {label && <InputLabel>{label}</InputLabel>}
-        <Select>
+        <Select style={selectStyle}>
           <MenuItem>-</MenuItem>
           {items &&
             items.map((item, index) => (

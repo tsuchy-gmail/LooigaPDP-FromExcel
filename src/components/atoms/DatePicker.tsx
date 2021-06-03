@@ -27,7 +27,7 @@ const MyDatePicker: React.VFC<DatePickerProps> = ({ size, weight, color }) => {
   const inputProps = {
     style: {
       fontSize: size,
-      fontWeight: weight,
+      fontWeight: weight ?? 700,
       color: color,
     },
   };

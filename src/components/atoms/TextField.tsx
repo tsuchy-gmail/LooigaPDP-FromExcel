@@ -25,13 +25,13 @@ const MyTextField: VFC<TextFieldProps> = ({
   shrink,
 }) => {
   const textFieldStyle = {
-    width,
+    width: width ?? "100%",
   };
 
   const inputProps = {
     style: {
       fontSize: size,
-      fontWeight: weight,
+      fontWeight: weight ?? 700,
     },
     endAdornment: end,
   };
