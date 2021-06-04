@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import styled from "styled-components";
@@ -11,44 +11,41 @@ import Organizations from "./components/organisms/Organizations";
 import IconTextWithInputFileButton from "./components/molecules/IconTextWithInputFileButton";
 
 import MuiButton from "@material-ui/core/Button";
-import Paper from "./components/atoms/Paper";
+import Paper from "components/atoms/Paper";
 import ExcelImport from "./components/organisms/ExcelImport";
 import ProjectDate from "./components/organisms/ProjectDate";
 
 function App() {
-  const [date, setDate] = useState(new Date());
-  const Grid = styled.div`
-    display: grid;
-    grid-template-rows: 300px 150px;
-    grid-template-columns: 450px 1fr;
-    > * {
-      margin: 10px;
-    }
-    grid-template-areas:
-      "AreaA AreaB"
-      "AreaA AreaC";
-  `;
+  const projectNameRef = useRef<HTMLInputElement>(null);
+  const organizationRef = useRef<HTMLInputElement>(null);
+  const depotsRef = useRef<HTMLInputElement>(null);
+  const excelImportRef = useRef<HTMLInputElement>(null);
+  const log = () => {
+    if (excelImportRef.current?.files)
+      console.log(excelImportRef.current.files[0]);
+    else console.log("current is null");
+  };
+  const organizations = ["オプティ", "土運輸", "佐川急便"];
 
-  const [checked, setIsChecked] = React.useState(false);
-  const handleChange = () => setIsChecked(!checked);
-
-  const Wrapper = styled.div`
-    padding-top: 20px;
-    > * {
-      margin-bottom: 0px;
-    }
-  `;
   return (
     <div style={{ background: "#F4F5F6" }}>
-      <Wrapper>
-        <ExcelImport />
-        <Organizations />
-        <Depots />
-        <ProjectName />
-        <ProjectDate />
-        <CarriersSettings />
-        <img src={logo} className="App-logo" alt="logo" />
-      </Wrapper>
+      <div
+        onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+          console.log("target = ", event.target);
+          console.log("currentTarget = ", event.currentTarget);
+        }}
+      >
+        parent
+        <button>innerButton</button>
+      </div>
+      <MuiButton onClick={log}>Ref</MuiButton>
+      <ExcelImport parentRef={excelImportRef} />
+      <Organizations items={organizations} parentRef={organizationRef} />
+      <Depots parentRef={depotsRef} items={organizations} />
+      <ProjectName parentRef={projectNameRef} />
+      <ProjectDate />
+      <CarriersSettings />
+      <img src={logo} className="App-logo" alt="logo" />
     </div>
   );
 }

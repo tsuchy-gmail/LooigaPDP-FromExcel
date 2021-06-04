@@ -9,8 +9,8 @@ import Button, { ButtonProps } from "./Button";
 import TextField from "./TextField";
 
 type DialogProps = {
-  buttonContent: React.ReactElement | string;
-  title: string;
+  buttonText: React.ReactElement | string;
+  title: React.ReactElement | string;
   actionText: string;
 };
 
@@ -23,7 +23,7 @@ const DialogButton: React.FC<DialogButtonProps> = ({
   color,
   background,
   title,
-  buttonContent,
+  buttonText,
   actionText,
   children,
 }) => {
@@ -38,14 +38,14 @@ const DialogButton: React.FC<DialogButtonProps> = ({
   return (
     <div>
       <Button
-        variant={variant ?? "outlined"}
+        variant={variant}
         color={color}
         background={background}
         width={width}
         height={height}
         onClick={handleClickOpen}
       >
-        {buttonContent ?? "Open Dialog"}
+        {buttonText ?? "Open Dialog"}
       </Button>
       <Dialog open={isDialogOpen} onClose={handleClickClose} maxWidth="xl">
         <DialogTitle>{title ?? "Title"}</DialogTitle>

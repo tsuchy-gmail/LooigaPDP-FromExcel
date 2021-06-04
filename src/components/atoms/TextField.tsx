@@ -11,6 +11,8 @@ export type TextFieldProps = {
   placeholder?: string;
   type?: string;
   shrink?: boolean;
+  autoFocus?: boolean;
+  parentRef?: React.RefObject<HTMLInputElement>;
 };
 
 const MyTextField: VFC<TextFieldProps> = ({
@@ -23,6 +25,8 @@ const MyTextField: VFC<TextFieldProps> = ({
   placeholder,
   type,
   shrink,
+  autoFocus,
+  parentRef,
 }) => {
   const textFieldStyle = {
     width: width ?? "100%",
@@ -50,6 +54,8 @@ const MyTextField: VFC<TextFieldProps> = ({
         InputLabelProps={inputLabelProps}
         placeholder={placeholder}
         type={type}
+        autoFocus={autoFocus}
+        inputRef={parentRef}
       />
     </div>
   );

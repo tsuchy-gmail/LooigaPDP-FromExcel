@@ -44,7 +44,7 @@ const CarriersSettings = () => {
       <ContentsWrapper>
         <CarrierSettingsRowsWrapper>
           {rows.map((Row, index) => (
-            <Row deleteRow={() => deleteRow(index)} />
+            <Row deleteRow={() => deleteRow(index)} key={index} />
           ))}
         </CarrierSettingsRowsWrapper>
         <IconButtonWrapper>

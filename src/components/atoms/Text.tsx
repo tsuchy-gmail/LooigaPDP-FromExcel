@@ -9,11 +9,11 @@ export type TextProps = {
 const Text: FC<TextProps> = ({ size, weight, color, children }) => {
   const textStyle = {
     fontSize: size,
-    fontWeight: 700,
+    fontWeight: weight ?? 700,
     color: color,
   };
 
-  return <div style={{ fontWeight: 700 }}>{children}</div>;
+  return <div style={textStyle}>{children}</div>;
 };
 
 export default Text;

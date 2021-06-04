@@ -1,9 +1,12 @@
 import React from "react";
 
 import Button, { ButtonProps } from "./Button";
+import Text from "./Text";
+import IconText from "../molecules/IconText";
 
 export type InputFileButtonProps = {
   id: string;
+  parentRef: React.RefObject<HTMLInputElement>;
 } & ButtonProps;
 
 const InputFileButton: React.FC<Partial<InputFileButtonProps>> = ({
@@ -13,11 +16,32 @@ const InputFileButton: React.FC<Partial<InputFileButtonProps>> = ({
   background,
   variant,
   id = "initialId",
-  children,
+  parentRef,
 }) => {
+  const [file, setFile] = React.useState<File>();
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const fileList = event.target.files;
+    if (fileList) setFile(fileList[0]);
+    fileList && console.log("file = ", fileList[0]);
+  };
+
+  const buttonText = file ? (
+    <IconText type="CheckCircleOutline" text={file.name} marginRight="10px" />
+  ) : (
+    "ファイルを選択"
+  );
+
   return (
     <div>
-      <input hidden id={id} type="file" />
+      <input
+        accept=".xlsx"
+        onChange={handleChange}
+        hidden
+        id={id}
+        type="file"
+        ref={parentRef}
+      />
       <label htmlFor={id}>
         <Button
           width={width}
@@ -27,7 +51,7 @@ const InputFileButton: React.FC<Partial<InputFileButtonProps>> = ({
           variant={variant}
           component="span" //defaultの'button'のままだとなぜかtype='file'が機能しない
         >
-          {children}
+          <Text weight={500}>{buttonText}</Text>
         </Button>
       </label>
     </div>

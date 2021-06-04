@@ -3,11 +3,17 @@ import React from "react";
 import IconTextWithInputFileButton from "../molecules/IconTextWithInputFileButton";
 import Text from "../atoms/Text";
 
-const ExcelImport = () => {
+type ExcelImportProps = {
+  parentRef?: React.RefObject<HTMLInputElement>;
+};
+
+const ExcelImport: React.VFC<ExcelImportProps> = ({ parentRef }) => {
   return (
-    <IconTextWithInputFileButton type="ListAlt" text="Excel">
-      <Text weight={500}>ファイルを選択</Text>
-    </IconTextWithInputFileButton>
+    <IconTextWithInputFileButton
+      type="ListAlt"
+      text="Excel"
+      parentRef={parentRef}
+    />
   );
 };
 

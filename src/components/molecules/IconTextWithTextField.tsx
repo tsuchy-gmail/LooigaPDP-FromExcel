@@ -22,17 +22,23 @@ type IconTextWithTextFieldProps = {
   text?: string;
   iconSize?: string;
   placeholder?: string;
+  parentRef?: React.RefObject<HTMLInputElement>;
 };
 
 const IconTextWithTextField: React.VFC<IconTextWithTextFieldProps> = ({
   placeholder,
+  parentRef,
   ...iconTextProps
 }) => {
   return (
     <Paper>
       <Wrapper>
         <IconText textSize="18px" {...iconTextProps} />
-        <TextField size="16px" placeholder={placeholder} />
+        <TextField
+          parentRef={parentRef}
+          size="16px"
+          placeholder={placeholder}
+        />
       </Wrapper>
     </Paper>
   );

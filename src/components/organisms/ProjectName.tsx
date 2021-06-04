@@ -4,7 +4,11 @@ import styled from "styled-components";
 import { current } from "../../utils/date";
 import IconTextWithTextField from "../molecules/IconTextWithTextField";
 
-const ProjectName = () => {
+type ProjectNameProps = {
+  parentRef: React.RefObject<HTMLInputElement>;
+};
+
+const ProjectName: React.VFC<Partial<ProjectNameProps>> = ({ parentRef }) => {
   const [state, setState] = React.useState(3);
 
   return (
@@ -12,6 +16,7 @@ const ProjectName = () => {
       type="LabelImportant"
       text="Project Name"
       placeholder={`${current.monthDate}のプロジェクト`}
+      parentRef={parentRef}
     />
   );
 };
