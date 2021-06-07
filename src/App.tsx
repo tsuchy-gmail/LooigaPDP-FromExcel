@@ -15,6 +15,7 @@ import Paper from "./components/atoms/Paper";
 import ExcelImport from "./components/organisms/ExcelImport";
 import ProjectDate from "./components/organisms/ProjectDate";
 import { organizationsList } from "./organizationsData";
+import RequestFloatButton from "./components/atoms/RequestFloatButton";
 
 const { myorgProd, myorgDev } = organizationsList;
 
@@ -24,9 +25,7 @@ function App() {
   //organization info
 
   const organizationListState = useState(
-    new Map([
-      ["土本運輸dev", { AppId: myorgDev.AppID, ApiKey: myorgDev.ApiKey }],
-    ])
+    new Map([["dev", { AppId: myorgDev.AppID, ApiKey: myorgDev.ApiKey }]])
   );
   const selectedOrganizationState = useState("");
 
@@ -36,16 +35,20 @@ function App() {
 
   return (
     <div style={{ background: "#F4F5F6" }}>
-      <ExcelImport parentRef={excelImportRef} />
-      <Organizations
-        organizationListState={organizationListState}
-        selectedOrganizationState={selectedOrganizationState}
-      />
-      <Depots parentRef={depotsRef} />
-      <ProjectName parentRef={projectNameRef} />
-      <ProjectDate />
-      <CarriersSettings />
-      <img src={logo} className="App-logo" alt="logo" />
+      <div style={{ padding: "1px" }}>
+        <Paper elevation={3} marginTop="30px" marginBottom="30px">
+          <ExcelImport parentRef={excelImportRef} />
+          <Organizations
+            organizationListState={organizationListState}
+            selectedOrganizationState={selectedOrganizationState}
+          />
+          <Depots parentRef={depotsRef} />
+          <ProjectName parentRef={projectNameRef} />
+          <ProjectDate />
+          <CarriersSettings />
+          <RequestFloatButton />
+        </Paper>
+      </div>
     </div>
   );
 }
