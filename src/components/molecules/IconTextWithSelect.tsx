@@ -8,6 +8,8 @@ import Paper from "../atoms/Paper";
 import DialogButton from "../atoms/DialogButton";
 import Text from "../atoms/Text";
 
+import { ChangeSelect } from "../../utils/types";
+
 const UpperSideWrapper = styled.div`
   display: flex;
   > :first-child {
@@ -42,6 +44,11 @@ type IconTextWithSelectProps = {
   parentRef: React.RefObject<HTMLInputElement>;
   registerDialog: React.ReactElement;
   deleteDialog: React.ReactElement;
+  canRegister: boolean;
+  handleRegister: () => void;
+  alertMessage: string;
+  value: string;
+  onChange: ChangeSelect;
 };
 
 const IconTextWithSelect: React.VFC<Partial<IconTextWithSelectProps>> = ({
@@ -54,6 +61,11 @@ const IconTextWithSelect: React.VFC<Partial<IconTextWithSelectProps>> = ({
   parentRef,
   registerDialog,
   deleteDialog,
+  canRegister,
+  alertMessage,
+  handleRegister,
+  value,
+  onChange,
 }) => {
   return (
     <Paper>
@@ -65,6 +77,9 @@ const IconTextWithSelect: React.VFC<Partial<IconTextWithSelectProps>> = ({
               title={<Text weight={700}>{leftButtonText}</Text>}
               buttonText={<IconText type="ArrowRight" text={leftButtonText} />}
               actionText="登録"
+              canExecute={canRegister ?? true}
+              alertMessage={alertMessage}
+              handleExecution={handleRegister}
             >
               {registerDialog}
             </DialogButton>
@@ -79,7 +94,12 @@ const IconTextWithSelect: React.VFC<Partial<IconTextWithSelectProps>> = ({
             </DialogButton>
           </TwoButtonsWrapper>
         </UpperSideWrapper>
-        <Select items={items} parentRef={parentRef} />
+        <Select
+          items={items}
+          value={value}
+          onChange={onChange}
+          parentRef={parentRef}
+        />
       </Wrapper>
     </Paper>
   );

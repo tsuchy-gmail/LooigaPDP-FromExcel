@@ -12,11 +12,14 @@ type DialogProps = {
   buttonText: React.ReactElement | string;
   title: React.ReactElement | string;
   actionText: string;
+  canExecute: boolean;
+  handleExecution: () => void;
+  alertMessage: string;
 };
 
-type DialogButtonProps = ButtonProps & Partial<DialogProps>;
+type DialogButtonProps = ButtonProps & DialogProps;
 
-const DialogButton: React.FC<DialogButtonProps> = ({
+const DialogButton: React.FC<Partial<DialogButtonProps>> = ({
   variant,
   width,
   height,
@@ -26,6 +29,9 @@ const DialogButton: React.FC<DialogButtonProps> = ({
   buttonText,
   actionText,
   children,
+  canExecute,
+  alertMessage,
+  handleExecution,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -33,6 +39,15 @@ const DialogButton: React.FC<DialogButtonProps> = ({
   };
   const handleClickClose = () => {
     setIsDialogOpen(false);
+  };
+
+  const handleExecutionWithClose = () => {
+    if (canExecute && handleExecution) {
+      handleExecution();
+      setIsDialogOpen(false);
+    } else {
+      window.alert(alertMessage);
+    }
   };
 
   return (
@@ -52,7 +67,7 @@ const DialogButton: React.FC<DialogButtonProps> = ({
         <DialogContent>{children}</DialogContent>
         <DialogActions>
           <Button onClick={handleClickClose}>キャンセル</Button>
-          <Button onClick={handleClickClose}>
+          <Button onClick={handleExecutionWithClose}>
             {actionText ?? "someAction"}
           </Button>
         </DialogActions>

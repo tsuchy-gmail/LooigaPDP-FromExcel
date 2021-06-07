@@ -11,37 +11,37 @@ import Organizations from "./components/organisms/Organizations";
 import IconTextWithInputFileButton from "./components/molecules/IconTextWithInputFileButton";
 
 import MuiButton from "@material-ui/core/Button";
-import Paper from "components/atoms/Paper";
+import Paper from "./components/atoms/Paper";
 import ExcelImport from "./components/organisms/ExcelImport";
 import ProjectDate from "./components/organisms/ProjectDate";
+import { organizationsList } from "./organizationsData";
+
+const { myorgProd, myorgDev } = organizationsList;
 
 function App() {
   const projectNameRef = useRef<HTMLInputElement>(null);
-  const organizationRef = useRef<HTMLInputElement>(null);
+  console.log("Org");
+  //organization info
+
+  const organizationListState = useState(
+    new Map([
+      ["土本運輸dev", { AppId: myorgDev.AppID, ApiKey: myorgDev.ApiKey }],
+    ])
+  );
+  const selectedOrganizationState = useState("");
+
+  //
   const depotsRef = useRef<HTMLInputElement>(null);
   const excelImportRef = useRef<HTMLInputElement>(null);
-  const log = () => {
-    if (excelImportRef.current?.files)
-      console.log(excelImportRef.current.files[0]);
-    else console.log("current is null");
-  };
-  const organizations = ["オプティ", "土運輸", "佐川急便"];
 
   return (
     <div style={{ background: "#F4F5F6" }}>
-      <div
-        onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-          console.log("target = ", event.target);
-          console.log("currentTarget = ", event.currentTarget);
-        }}
-      >
-        parent
-        <button>innerButton</button>
-      </div>
-      <MuiButton onClick={log}>Ref</MuiButton>
       <ExcelImport parentRef={excelImportRef} />
-      <Organizations items={organizations} parentRef={organizationRef} />
-      <Depots parentRef={depotsRef} items={organizations} />
+      <Organizations
+        organizationListState={organizationListState}
+        selectedOrganizationState={selectedOrganizationState}
+      />
+      <Depots parentRef={depotsRef} />
       <ProjectName parentRef={projectNameRef} />
       <ProjectDate />
       <CarriersSettings />

@@ -9,6 +9,7 @@ export type ButtonProps = {
   variant?: "contained" | "outlined";
   onClick?: () => void;
   component?: string;
+  disabled?: boolean;
 };
 
 type ButtonStyle = {

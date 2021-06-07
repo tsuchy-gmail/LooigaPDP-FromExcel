@@ -7,17 +7,19 @@ import {
   InputLabel,
 } from "@material-ui/core";
 
-type SelectPrps = {
-  items?: (string | number)[];
-  width?: number | string;
-  label?: string;
-  helper?: string;
-  size?: string;
-  weight?: number;
-  parentRef?: React.RefObject<HTMLInputElement>;
-};
+type SelectProps = Partial<{
+  items: (string | number)[];
+  width: number | string;
+  label: string;
+  helper: string;
+  size: string;
+  weight: number;
+  parentRef: React.RefObject<HTMLInputElement>;
+  value: string;
+  onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+}>;
 
-const MySelect: VFC<SelectPrps> = ({
+const MySelect: VFC<SelectProps> = ({
   items,
   width,
   label,
@@ -25,6 +27,8 @@ const MySelect: VFC<SelectPrps> = ({
   size,
   weight,
   parentRef,
+  value,
+  onChange,
 }) => {
   const formControlStyle = {
     width: width ?? "100%",
@@ -43,11 +47,16 @@ const MySelect: VFC<SelectPrps> = ({
     <div>
       <FormControl style={formControlStyle}>
         {label && <InputLabel>{label}</InputLabel>}
-        <Select style={selectStyle} inputRef={parentRef}>
+        <Select
+          value={value}
+          onChange={onChange}
+          style={selectStyle}
+          inputRef={parentRef}
+        >
           <MenuItem>-</MenuItem>
           {items &&
-            items.map((item, index) => (
-              <MenuItem key={index} value={index} style={menuItemStyle}>
+            items.map((item) => (
+              <MenuItem key={item} value={item} style={menuItemStyle}>
                 {item}
               </MenuItem>
             ))}

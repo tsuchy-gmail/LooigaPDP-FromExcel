@@ -1,21 +1,23 @@
 import React, { VFC } from "react";
-import { TextField } from "@material-ui/core";
+import MuiTextField from "@material-ui/core/TextField";
 
-export type TextFieldProps = {
-  width?: number | string;
-  label?: string;
-  helper?: string;
-  size?: string;
-  weight?: number;
-  end?: string;
-  placeholder?: string;
-  type?: string;
-  shrink?: boolean;
-  autoFocus?: boolean;
-  parentRef?: React.RefObject<HTMLInputElement>;
-};
+export type TextFieldProps = Partial<{
+  width: number | string;
+  label: string;
+  helper: string;
+  size: string;
+  weight: number;
+  end: string;
+  placeholder: string;
+  type: string;
+  shrink: boolean;
+  autoFocus: boolean;
+  parentRef: React.RefObject<HTMLInputElement>;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}>;
 
-const MyTextField: VFC<TextFieldProps> = ({
+const TextField: VFC<TextFieldProps> = ({
   width,
   label,
   helper,
@@ -27,6 +29,8 @@ const MyTextField: VFC<TextFieldProps> = ({
   shrink,
   autoFocus,
   parentRef,
+  value,
+  onChange,
 }) => {
   const textFieldStyle = {
     width: width ?? "100%",
@@ -46,7 +50,7 @@ const MyTextField: VFC<TextFieldProps> = ({
 
   return (
     <div>
-      <TextField
+      <MuiTextField
         style={textFieldStyle}
         label={label}
         helperText={helper}
@@ -56,9 +60,11 @@ const MyTextField: VFC<TextFieldProps> = ({
         type={type}
         autoFocus={autoFocus}
         inputRef={parentRef}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );
 };
 
-export default MyTextField;
+export default TextField;
