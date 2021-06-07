@@ -6,7 +6,7 @@ import { primary } from "../../utils/colors";
 export type CheckboxProps = {
   scale: number;
   icon: React.ReactElement;
-  checkedIcon: React.ReactElement;
+  checkedIcon: React.ReactElement | React.ReactNode;
   value: any;
   onChange: () => void;
 };

@@ -10,7 +10,7 @@ import Fab from "@material-ui/core/Fab";
 import IconText from "../molecules/IconText";
 
 const ContentsWrapper = styled.div`
-  width: 830px;
+  width: 1050px;
   margin: 0 auto;
 `;
 

@@ -8,12 +8,12 @@ import Button from "../atoms/Button";
 import Text from "../atoms/Text";
 import Checkbox from "../atoms/Checkbox";
 import CheckboxWithText from "../molecules/CheckboxWithText";
-import { disable, secondary } from "../../utils/colors";
+import { disable, secondary, primary } from "../../utils/colors";
 
-import IconButton from "@material-ui/core/IconButton";
-
+import MuiIconButton from "@material-ui/core/IconButton";
 import MuiPaper from "@material-ui/core/Paper";
 import MuiFab from "@material-ui/core/Fab";
+
 import Paper from "../atoms/Paper";
 
 const Wrapper = styled.div`
@@ -42,7 +42,7 @@ const BreakSettingsWrapper = styled.div`
 `;
 
 const CheckCircleWrapper = styled.div`
-  margin-right: 12px;
+  margin-right: 80px;
 `;
 
 const CheckboxWrapper = styled.div`
@@ -62,51 +62,55 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({ deleteRow }) => {
   const handleChange = () => {
     setIsOpen((isOpen) => !isOpen);
   };
-  const [check, setCheck] = React.useState(true);
+  const [checked, setChecked] = React.useState(true);
 
   return (
-    <Wrapper>
-      <CheckCircleWrapper>
-        <Checkbox
-          icon={<Icon type="CheckCircleOutline" color={disable} />}
-          checkedIcon={<Icon type={"CheckCircle"} />}
-          scale={1.3}
-        />
-      </CheckCircleWrapper>
-      <Paper minWidth="710px" elevation={3}>
-        <MainSettingsWrapper>
-          <Select
-            items={carrierCountOptions}
-            weight={700}
-            width={width}
-            label="車両台数"
+    <Paper opacity={checked ? 1 : 0.5} minWidth="800px" elevation={3}>
+      <Wrapper>
+        <CheckCircleWrapper>
+          <Checkbox
+            value={checked}
+            onChange={() => setChecked(!checked)}
+            checkedIcon={<Icon type="RadioButtonUnchecked" />}
+            icon={<Icon type="CheckCircle" color={primary} />}
+            scale={1.4}
           />
-          <TextField width={width} label="積載容量" />
-          <TimePicker width={width} label="出発時刻" />
-          <TimePicker width={width} label="帰着時刻" />
-          <CheckboxWrapper>
-            <CheckboxWithText
-              value={isOpen}
-              weight={500}
-              onChange={handleChange}
-            >
-              {isOpen ? <b>休憩あり</b> : "休憩なし"}
-            </CheckboxWithText>
-          </CheckboxWrapper>
-        </MainSettingsWrapper>
+        </CheckCircleWrapper>
+        <div>
+          <MainSettingsWrapper>
+            <Select
+              items={carrierCountOptions}
+              weight={700}
+              width={width}
+              label="車両台数"
+            />
+            <TextField width={width} label="積載容量" />
+            <TimePicker width={width} label="出発時刻" />
+            <TimePicker width={width} label="帰着時刻" />
+            <CheckboxWrapper>
+              <CheckboxWithText
+                value={isOpen}
+                weight={500}
+                onChange={handleChange}
+              >
+                {isOpen ? <b>休憩あり</b> : "休憩なし"}
+              </CheckboxWithText>
+            </CheckboxWrapper>
+          </MainSettingsWrapper>
 
-        {isOpen && (
-          <BreakSettingsWrapper>
-            <TimePicker width={width} label="休憩開始(可能)" />
-            <TimePicker width={width} label="休憩終了(可能)" />
-            <TextField width={width} label="休憩時間" end="min" />
-          </BreakSettingsWrapper>
-        )}
-      </Paper>
-      <IconButton onClick={deleteRow}>
-        <Icon color={secondary} type="DeleteSweep" />
-      </IconButton>
-    </Wrapper>
+          {isOpen && (
+            <BreakSettingsWrapper>
+              <TimePicker width={width} label="休憩開始(可能)" />
+              <TimePicker width={width} label="休憩終了(可能)" />
+              <TextField width={width} label="休憩時間" end="min" />
+            </BreakSettingsWrapper>
+          )}
+        </div>
+        <MuiIconButton style={{ marginLeft: "80px" }} onClick={deleteRow}>
+          <Icon type="DeleteSweep" color={secondary} />
+        </MuiIconButton>
+      </Wrapper>
+    </Paper>
   );
 };
 
