@@ -25,21 +25,22 @@ function App() {
     new Map([["dev", { AppId: myorgDev.AppID, ApiKey: myorgDev.ApiKey }]])
   );
   const selectedOrganizationState = useState("");
-  //
 
   //Depots info
   const depotListState = useState(
     new Map([["名古屋駅", { lat: 35.1705, lng: 136.88193 }]])
   );
   const selectedDepotState = useState("");
-  //
 
   //ProjectName info
   const projectNameRef = useRef<HTMLInputElement>(null);
-  //
 
   //ExcelImport info
   const excelImportRef = useRef<HTMLInputElement>(null);
+
+  //ProjectDate info
+  const projectDateState = useState<Date | null>(new Date());
+  console.log("App.tsx : ", projectDateState[0]);
 
   return (
     <div style={{ background: "#F4F5F6", padding: "30px 0" }}>
@@ -65,7 +66,7 @@ function App() {
         >
           ProjectName Ref
         </MuiButton>
-        <ProjectDate />
+        <ProjectDate projectDateState={projectDateState} />
         <CarriersSettings />
         <RequestFloatButton />
       </Paper>

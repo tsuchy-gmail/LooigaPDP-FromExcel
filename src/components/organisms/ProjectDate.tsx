@@ -4,6 +4,7 @@ import styled from "styled-components";
 import DatePicker from "../atoms/DatePicker";
 import IconText from "../molecules/IconText";
 import Paper from "../atoms/Paper";
+import { UseState } from "../../utils/types";
 
 const Wrapper = styled.div`
   & > {
@@ -21,13 +22,28 @@ const DatePickerWrapper = styled.div`
   margin: 0 auto;
 `;
 
-const ProjectDate = () => {
+type ProjectDateProps = {
+  projectDateState: UseState<Date | null>;
+};
+
+const ProjectDate: React.VFC<ProjectDateProps> = ({ projectDateState }) => {
+  const [projectDate, setProjectDate] = projectDateState;
+
+  const handleChangeDate = (date: Date | null) => {
+    setProjectDate(date);
+  };
+
   return (
     <Paper>
       <Wrapper>
         <IconText type="Schedule" text="Date" />
         <DatePickerWrapper>
-          <DatePicker size="20px" label="プロジェクトの日付" />
+          <DatePicker
+            value={projectDate}
+            onChange={handleChangeDate}
+            size="19px"
+            label="プロジェクトの日付"
+          />
         </DatePickerWrapper>
       </Wrapper>
     </Paper>

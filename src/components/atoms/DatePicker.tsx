@@ -12,6 +12,8 @@ type DatePickerProps = {
   weight?: number;
   color?: string;
   label?: string;
+  value: Date | null;
+  onChange: (date: Date | null) => void;
 };
 
 const MyDatePicker: React.VFC<DatePickerProps> = ({
@@ -19,13 +21,10 @@ const MyDatePicker: React.VFC<DatePickerProps> = ({
   weight,
   color,
   label,
+  value,
+  onChange,
 }) => {
-  const now = new Date();
-  const [value, setValue] = React.useState(now);
-  const handleChange = (date: any) => {
-    setValue(date);
-  };
-  const onlyDate = value.toISOString().substr(0, 11); //2021-05-26T
+  //const onlyDate = value.toISOString().substr(0, 11); //2021-05-26T
 
   const inputProps = {
     style: {
@@ -33,6 +32,7 @@ const MyDatePicker: React.VFC<DatePickerProps> = ({
       fontWeight: weight ?? 700,
       color: color,
     },
+    readOnly: true,
   };
 
   return (
@@ -42,7 +42,7 @@ const MyDatePicker: React.VFC<DatePickerProps> = ({
         variant="inline"
         label={label}
         value={value}
-        onChange={handleChange}
+        onChange={onChange}
         format="yyyy-MM-dd"
         InputProps={inputProps}
       />
