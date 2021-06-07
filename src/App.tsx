@@ -20,35 +20,55 @@ import RequestFloatButton from "./components/atoms/RequestFloatButton";
 const { myorgProd, myorgDev } = organizationsList;
 
 function App() {
-  const projectNameRef = useRef<HTMLInputElement>(null);
-  console.log("Org");
-  //organization info
-
+  //Organization info
   const organizationListState = useState(
     new Map([["dev", { AppId: myorgDev.AppID, ApiKey: myorgDev.ApiKey }]])
   );
   const selectedOrganizationState = useState("");
-
   //
-  const depotsRef = useRef<HTMLInputElement>(null);
+
+  //Depots info
+  const depotListState = useState(
+    new Map([["名古屋駅", { lat: 35.1705, lng: 136.88193 }]])
+  );
+  const selectedDepotState = useState("");
+  //
+
+  //ProjectName info
+  const projectNameRef = useRef<HTMLInputElement>(null);
+  //
+
+  //ExcelImport info
   const excelImportRef = useRef<HTMLInputElement>(null);
 
   return (
-    <div style={{ background: "#F4F5F6" }}>
-      <div style={{ padding: "1px" }}>
-        <Paper elevation={3} marginTop="30px" marginBottom="30px">
-          <ExcelImport parentRef={excelImportRef} />
-          <Organizations
-            organizationListState={organizationListState}
-            selectedOrganizationState={selectedOrganizationState}
-          />
-          <Depots parentRef={depotsRef} />
-          <ProjectName parentRef={projectNameRef} />
-          <ProjectDate />
-          <CarriersSettings />
-          <RequestFloatButton />
-        </Paper>
-      </div>
+    <div style={{ background: "#F4F5F6", padding: "30px 0" }}>
+      <Paper elevation={2}>
+        <ExcelImport parentRef={excelImportRef} />
+        <MuiButton onClick={() => console.log(excelImportRef.current?.value)}>
+          ExcelImport Ref
+        </MuiButton>
+        <Organizations
+          organizationListState={organizationListState}
+          selectedOrganizationState={selectedOrganizationState}
+        />
+        <Depots
+          depotListState={depotListState}
+          selectedDepotState={selectedDepotState}
+        />
+        <ProjectName parentRef={projectNameRef} />
+        <MuiButton
+          onClick={() => {
+            if (projectNameRef.current?.files)
+              console.log(projectNameRef.current.files[0]);
+          }}
+        >
+          ProjectName Ref
+        </MuiButton>
+        <ProjectDate />
+        <CarriersSettings />
+        <RequestFloatButton />
+      </Paper>
     </div>
   );
 }

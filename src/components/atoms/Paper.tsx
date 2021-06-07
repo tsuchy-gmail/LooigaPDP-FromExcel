@@ -14,7 +14,7 @@ const Paper: React.FC<Partial<PaperProps & React.CSSProperties>> = ({
   const paperStyle = {
     padding: "50px 30px",
     width: "93%",
-    margin: "0 auto",
+    margin: "0px auto",
     ...styleProps,
   };
 

@@ -29,7 +29,6 @@ const DialogButton: React.FC<Partial<DialogButtonProps>> = ({
   buttonText,
   actionText,
   children,
-  canExecute,
   alertMessage,
   handleExecution,
 }) => {
@@ -42,8 +41,8 @@ const DialogButton: React.FC<Partial<DialogButtonProps>> = ({
   };
 
   const handleExecutionWithClose = () => {
-    if (canExecute && handleExecution) {
-      handleExecution();
+    if (!alertMessage) {
+      if (handleExecution) handleExecution();
       setIsDialogOpen(false);
     } else {
       window.alert(alertMessage);

@@ -18,7 +18,7 @@ const IconButtonWrapper = styled.div`
   text-align: center;
 `;
 const CarrierSettingsRowsWrapper = styled.div`
-  margin-top: 20px;
+  margin-top: 50px;
   > * {
     margin-bottom: 30px;
   }

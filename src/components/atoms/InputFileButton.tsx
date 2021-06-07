@@ -29,7 +29,7 @@ const InputFileButton: React.FC<Partial<InputFileButtonProps>> = ({
   const buttonText = file ? (
     <IconText type="CheckCircleOutline" text={file.name} marginRight="10px" />
   ) : (
-    "ファイルを選択"
+    <Text weight={700}>ファイルを選択</Text>
   );
 
   return (

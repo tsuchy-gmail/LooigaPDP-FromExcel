@@ -11,14 +11,23 @@ import {
   ChangeSelect,
 } from "../../utils/types";
 
+type Organizations = Map<string, { AppId: string; ApiKey: string }>;
+
 type OrganizationValidation = {
-  (name: string, id: string, key: string, organizationList: Organizations): [
-    boolean,
-    string[]
-  ];
+  (
+    name: string,
+    id: string,
+    key: string,
+    organizationList: Organizations
+  ): string[];
 };
 
-const validateEveryField: OrganizationValidation = (name, id, key, organizationList) => {
+const validateNewOrganization: OrganizationValidation = (
+  name,
+  id,
+  key,
+  organizationList
+) => {
   const isAllFilled = !!(name && id && key);
   const isNameUnique = !organizationList.has(name);
   const isIdUnique = ![...organizationList.values()].some(
@@ -35,25 +44,14 @@ const validateEveryField: OrganizationValidation = (name, id, key, organizationL
   if (!isIdUnique) alertMessages.push(templeteMessage("App ID"));
   if (!isKeyUnique) alertMessages.push(templeteMessage("Api Key"));
 
-  const canRegister = !!(
-    isAllFilled &&
-    isNameUnique &&
-    isIdUnique &&
-    isKeyUnique
-  );
-
-  return [canRegister, alertMessages];
+  return alertMessages;
 };
-
-
 
 const RegisterDialogWrapper = styled.div`
   > * {
     margin-bottom: 20px;
   }
 `;
-
-type Organizations = Map<string, { AppId: string; ApiKey: string }>;
 
 type OrganizationsProps = {
   organizationListState: UseState<Organizations>;
@@ -84,7 +82,7 @@ const Organizations: React.VFC<OrganizationsProps> = ({
   };
 
   //MaterialUI-SelectのonChangeの都合?に合わせて<{value: unknown}>にしているため型を断定する必要あり
-  const handleChangeSelectedValue: ChangeSelect = (event) => {
+  const handleChangeSelectedOrganization: ChangeSelect = (event) => {
     setSelectedOrganization(event.target.value as string);
   };
 
@@ -94,13 +92,12 @@ const Organizations: React.VFC<OrganizationsProps> = ({
     setKey("");
   };
 
-  const [canRegister, alertMessages] = validateEveryField(
+  const validationResult = validateNewOrganization(
     name,
     id,
     key,
     organizationList
   );
-
 
   const handleRegister = () => {
     const newOrganizationsList = new Map(organizationList).set(name, {
@@ -162,10 +159,9 @@ const Organizations: React.VFC<OrganizationsProps> = ({
       registerDialog={registerDialog}
       deleteDialog={deleteDialog}
       value={selectedOrganization}
-      canRegister={canRegister}
-      alertMessage={alertMessages.join("\n")}
+      alertMessage={validationResult.join("\n")}
       handleRegister={handleRegister}
-      onChange={handleChangeSelectedValue}
+      onChange={handleChangeSelectedOrganization}
     />
   );
 };

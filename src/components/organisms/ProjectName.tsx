@@ -9,8 +9,6 @@ type ProjectNameProps = {
 };
 
 const ProjectName: React.VFC<Partial<ProjectNameProps>> = ({ parentRef }) => {
-  const [state, setState] = React.useState(3);
-
   return (
     <IconTextWithTextField
       type="LabelImportant"

@@ -22,7 +22,7 @@ const RequestFloatButton = () => {
       <MuiFab variant="extended" color="primary" style={{ padding: "0 20px" }}>
         <Icon type="Send" />
         <TextWrapper>
-          <Text>Loogiaにリクエストを送信</Text>
+          <Text>Loogiaへ送信</Text>
         </TextWrapper>
       </MuiFab>
     </PositionAbsolute>
