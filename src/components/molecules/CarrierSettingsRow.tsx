@@ -16,10 +16,11 @@ import MuiFab from "@material-ui/core/Fab";
 
 import Paper from "../atoms/Paper";
 
-import { HandleChange, ChangeTextFiled, ChangeSelect } from "../../utils/types";
+import { HandleChange, ChangeInput, ChangeSelect } from "../../utils/types";
 
 import { CarrierSettingsValues } from "../organisms/CarriersSettings";
 
+//--styled
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
@@ -29,9 +30,7 @@ const MainSettingsWrapper = styled.div`
   display: flex;
   align-items: center;
   > * {
-    :not(:last-child) {
-      margin-right: 30px;
-    }
+    margin-right: 30px;
   }
 `;
 
@@ -45,23 +44,33 @@ const BreakSettingsWrapper = styled.div`
   }
 `;
 
+type IsChecked = { isRowChecked: boolean };
+
+const SettingsWrapper = styled.div`
+  opacity: ${(props: IsChecked) => (props.isRowChecked ? 1 : 0.3)};
+`;
+
+const CheckboxWrapper = styled.div`
+  opacity: ${(props: IsChecked) => (props.isRowChecked ? 1 : 0.3)};
+`;
+
 const CheckCircleWrapper = styled.div`
   margin-right: 80px;
 `;
 
-const CheckboxWrapper = styled.div`
-  position: relative;
-  top: 7px;
+const IconButtonWrapper = styled.div`
+  margin-left: 80px;
+  margin-top: -2px;
 `;
 
-const carrierCountOptions = [...new Array(50).keys()].map((count) => count + 1); //[1,2,3,.....50]
+//---
 
 type CarrierSettingsRowProps = {
   deleteSettingsRow: () => void;
   carrierSettingsMap: Map<string, CarrierSettingsValues>;
   getHandleChangeSettings: (
     settingItem: string
-  ) => HandleChange<ChangeTextFiled | ChangeSelect>;
+  ) => HandleChange<ChangeInput | ChangeSelect>;
 };
 
 const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
@@ -69,29 +78,41 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
   carrierSettingsMap,
   getHandleChangeSettings,
 }) => {
-  //
-  console.log("carrierSettingsMap = ", carrierSettingsMap);
-  //
+  //---util
+  const carrierCountOptions = [...new Array(50).keys()].map(
+    (count) => count + 1
+  ); //[1,2,3,.....50]
   const width = 120;
+  //---
 
-  const [isOpen, setIsOpen] = React.useState(false);
-  const handleChange = () => {
-    setIsOpen((isOpen) => !isOpen);
+  const getStringValueAndOnChange = (settingItem: string) => {
+    return {
+      value: carrierSettingsMap.get(settingItem) as string,
+      onChange: getHandleChangeSettings(settingItem),
+    };
+  };
+
+  const isRowChecked = carrierSettingsMap.get("isRowChecked") as boolean;
+  const enableBreak = carrierSettingsMap.get("enableBreak") as boolean;
+
+  const paperStyle = {
+    minWidth: "800px",
+    background: isRowChecked ? "" : "rgba(200,200,200,0.3)",
   };
 
   return (
-    <Paper minWidth="800px" elevation={3}>
+    <Paper elevation={3} {...paperStyle}>
       <Wrapper>
         <CheckCircleWrapper>
           <Checkbox
-            value={carrierSettingsMap.get("isRowChecked")}
+            checked={isRowChecked}
             onChange={getHandleChangeSettings("isRowChecked")}
-            checkedIcon={<Icon type="RadioButtonUnchecked" />}
-            icon={<Icon type="CheckCircle" color={primary} />}
+            icon={<Icon type="RadioButtonUnchecked" />}
+            checkedIcon={<Icon type="CheckCircle" color={primary} />}
             scale={1.4}
           />
         </CheckCircleWrapper>
-        <div>
+        <SettingsWrapper isRowChecked={isRowChecked as boolean}>
           <MainSettingsWrapper>
             <Select
               value={carrierSettingsMap.get("carrierCount") as number}
@@ -102,40 +123,36 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
               label="車両台数"
             />
             <TextField
-              value={carrierSettingsMap.get("capacity") as string}
-              onChange={getHandleChangeSettings("capacity")}
+              {...getStringValueAndOnChange("capacity")}
               width={width}
               label="積載容量"
               shrink={true}
             />
             <TimePicker
+              {...getStringValueAndOnChange("departureTime")}
               width={width}
               label="出発時刻"
-              value={carrierSettingsMap.get("departureTime") as string}
-              onChange={getHandleChangeSettings("departureTime")}
             />
-            <TimePicker width={width} label="帰着時刻" />
-            <CheckboxWrapper>
-              <CheckboxWithText
-                value={isOpen}
-                weight={500}
-                onChange={handleChange}
-              >
-                {isOpen ? <b>休憩あり</b> : "休憩なし"}
-              </CheckboxWithText>
-            </CheckboxWrapper>
+            <TimePicker
+              {...getStringValueAndOnChange("arrivalTime")}
+              width={width}
+              label="帰着時刻"
+            />
           </MainSettingsWrapper>
-
-          {isOpen && (
+          {carrierSettingsMap.get("enableBreak") && (
             <BreakSettingsWrapper>
               <TimePicker
+                {...getStringValueAndOnChange("breakReadyTime")}
                 width={width}
                 label="休憩開始(可能)"
-                value={carrierSettingsMap.get("breakReadyTime") as string}
-                onChange={getHandleChangeSettings("breakReadyTime")}
               />
-              <TimePicker width={width} label="休憩終了(可能)" />
+              <TimePicker
+                {...getStringValueAndOnChange("breakDueTime")}
+                width={width}
+                label="休憩終了(可能)"
+              />
               <TextField
+                {...getStringValueAndOnChange("breakDuration")}
                 width={width}
                 label="休憩時間"
                 end="min"
@@ -143,13 +160,22 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
               />
             </BreakSettingsWrapper>
           )}
-        </div>
-        <MuiIconButton
-          style={{ marginLeft: "80px" }}
-          onClick={deleteSettingsRow}
-        >
-          <Icon type="DeleteSweep" color={secondary} />
-        </MuiIconButton>
+        </SettingsWrapper>
+        <CheckboxWrapper isRowChecked={isRowChecked}>
+          <CheckboxWithText
+            checked={enableBreak}
+            onChange={getHandleChangeSettings("enableBreak")}
+            weight={enableBreak ? 700 : 400}
+          >
+            休憩あり
+          </CheckboxWithText>
+        </CheckboxWrapper>
+
+        <IconButtonWrapper>
+          <MuiIconButton onClick={deleteSettingsRow}>
+            <Icon type="DeleteSweep" color={secondary} />
+          </MuiIconButton>
+        </IconButtonWrapper>
       </Wrapper>
     </Paper>
   );

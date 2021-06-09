@@ -8,7 +8,7 @@ import Select from "../atoms/Select";
 import {
   SetState,
   UseState,
-  ChangeTextFiled,
+  ChangeInput,
   ChangeSelect,
   HandleChange,
 } from "../../utils/types";
@@ -51,15 +51,15 @@ const Depots: React.VFC<DepotsProps> = ({
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
 
-  const handleChangeName: HandleChange<ChangeTextFiled> = (event) => {
+  const handleChangeName: HandleChange<ChangeInput> = (event) => {
     setName(event.target.value);
   };
-  const handleChangeLat: HandleChange<ChangeTextFiled> = (event) => {
+  const handleChangeLat: HandleChange<ChangeInput> = (event) => {
     setLat(event.target.value);
     const e = event.nativeEvent;
     console.log(e);
   };
-  const handleChangeLng: HandleChange<ChangeTextFiled> = (event) => {
+  const handleChangeLng: HandleChange<ChangeInput> = (event) => {
     setLng(event.target.value);
   };
 

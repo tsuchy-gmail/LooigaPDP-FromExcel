@@ -9,8 +9,9 @@ import MuiPaper from "@material-ui/core/Paper";
 import Fab from "@material-ui/core/Fab";
 import IconText from "../molecules/IconText";
 
-import { ChangeTextFiled, ChangeSelect, HandleChange } from "../../utils/types";
+import { ChangeInput, ChangeSelect, HandleChange } from "../../utils/types";
 
+//---styled
 const ContentsWrapper = styled.div`
   width: 1030px;
   margin: 0 auto;
@@ -25,10 +26,13 @@ const CarrierSettingsRowsWrapper = styled.div`
     margin-bottom: 30px;
   }
 `;
+//---
 
 export type CarrierSettingsValues = boolean | number | string;
 
 const CarriersSettings = () => {
+  console.log("Carrier");
+  //---rows for view
   const [carrierSettingsRows, setCarrierSettingsRows] = useState([
     CarrierSettingsRow,
   ]);
@@ -49,9 +53,9 @@ const CarriersSettings = () => {
     });
     deleteSettingsMap(index);
   };
+  //---
 
-  //-----
-
+  //---data in each row
   const initialCarrierSetttings = new Map<string, CarrierSettingsValues>([
     ["isRowChecked", true],
     ["carrierCount", 10],
@@ -76,29 +80,31 @@ const CarriersSettings = () => {
     listOfSettingsMap.splice(index, 1);
     setListOfSettingsMap([...listOfSettingsMap]);
   };
+  //---
 
+  //---handleChangeSettings
   type GetWrappedHandleChange = {
     (index: number): (
       settinItem: string
-    ) => (event: ChangeTextFiled | ChangeSelect) => void;
+    ) => (event: ChangeInput | ChangeSelect) => void;
   };
 
   const getWrappedHandleChangeSettings: GetWrappedHandleChange = (index) => (
     settingItem
   ) => (event) => {
-    const newValue = event.target.value;
-    //???
-    //const isTypeSafe = typof newValue ...  としてif(isTypeSafe)と書いても認識されない
-    if (
-      typeof newValue === "boolean" ||
-      typeof newValue === "string" ||
-      typeof newValue === "number"
-    )
-      listOfSettingsMap[index].set(settingItem, newValue);
-
-    setListOfSettingsMap([...listOfSettingsMap]);
+    const targetAsInputElement = event.target as HTMLInputElement;
+    if (targetAsInputElement.type === "checkbox") {
+      listOfSettingsMap[index].set(settingItem, targetAsInputElement.checked);
+      setListOfSettingsMap([...listOfSettingsMap]);
+    } else {
+      const newValue = event.target.value;
+      if (typeof newValue === "string" || typeof newValue === "number") {
+        listOfSettingsMap[index].set(settingItem, newValue);
+        setListOfSettingsMap([...listOfSettingsMap]);
+      }
+    }
   };
-  //-----
+  //---
 
   return (
     <Paper width="93%" margin="0 auto">

@@ -7,7 +7,7 @@ import Select from "../atoms/Select";
 import {
   SetState,
   UseState,
-  ChangeTextFiled,
+  ChangeInput,
   ChangeSelect,
   HandleChange,
 } from "../../utils/types";
@@ -72,13 +72,13 @@ const Organizations: React.VFC<OrganizationsProps> = ({
   const [id, setId] = useState("");
   const [key, setKey] = useState("");
 
-  const handleChangeName: HandleChange<ChangeTextFiled> = (event) => {
+  const handleChangeName: HandleChange<ChangeInput> = (event) => {
     setName(event.target.value);
   };
-  const handleChangeId: HandleChange<ChangeTextFiled> = (event) => {
+  const handleChangeId: HandleChange<ChangeInput> = (event) => {
     setId(event.target.value);
   };
-  const handleChangeKey: HandleChange<ChangeTextFiled> = (event) => {
+  const handleChangeKey: HandleChange<ChangeInput> = (event) => {
     setKey(event.target.value);
   };
 

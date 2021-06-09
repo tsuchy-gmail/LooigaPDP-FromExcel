@@ -19,6 +19,7 @@ import { organizationsList } from "./organizationsData";
 import RequestFloatButton from "./components/atoms/RequestFloatButton";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const { myorgProd, myorgDev } = organizationsList;
 
@@ -47,9 +48,25 @@ function App() {
   //Carriers info
   const carrierListState = useState<Map<string, unknown>[]>();
 
+  const [cheked, set] = useState(false);
+  const handle = (event: any) => {
+    set(!cheked);
+    console.log(event.target.checked);
+  };
+  console.log("App");
+
   return (
     <div style={{ background: "#F4F5F6", padding: "30px 0" }}>
       <Paper elevation={2}>
+        <Select onChange={(event: any) => console.log(event.target)}>
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+        </Select>
+        <Checkbox onChange={handle} />
+        <MuiTextField
+          onChange={(event: any) => console.log(event.target.type)}
+        />
+        <Select onChange={(event: any) => console.log(event.target)} />
         <ExcelImport parentRef={excelImportRef} />
         <MuiButton onClick={() => console.log(excelImportRef.current?.value)}>
           ExcelImport Ref

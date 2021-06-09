@@ -1,21 +1,22 @@
-import React from "react";
+import React, { ReactElement, ReactNode } from "react";
 
 import MuiCheckbox from "@material-ui/core/Checkbox";
 import { primary } from "../../utils/colors";
+import { ChangeInput, HandleChange } from "../../utils/types";
 
 export type CheckboxProps = {
   scale: number;
-  icon: React.ReactElement;
-  checkedIcon: React.ReactElement | React.ReactNode;
-  value: any;
-  onChange: (event: any) => void;
+  icon: ReactElement;
+  checkedIcon: ReactElement | ReactNode;
+  checked: boolean;
+  onChange: HandleChange<ChangeInput>;
 };
 
 const Checkbox: React.VFC<Partial<CheckboxProps>> = ({
   scale,
   icon,
   checkedIcon,
-  value,
+  checked,
   onChange,
 }) => {
   const checkboxStyle = {
@@ -25,12 +26,12 @@ const Checkbox: React.VFC<Partial<CheckboxProps>> = ({
   return (
     <div>
       <MuiCheckbox
+        checked={checked}
+        onChange={onChange}
         icon={icon}
         checkedIcon={checkedIcon}
         color="primary"
         style={checkboxStyle}
-        value={value}
-        onChange={onChange}
       />
     </div>
   );
