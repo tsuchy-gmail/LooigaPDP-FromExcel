@@ -8,7 +8,7 @@ export type CheckboxProps = {
   icon: React.ReactElement;
   checkedIcon: React.ReactElement | React.ReactNode;
   value: any;
-  onChange: () => void;
+  onChange: (event: any) => void;
 };
 
 const Checkbox: React.VFC<Partial<CheckboxProps>> = ({

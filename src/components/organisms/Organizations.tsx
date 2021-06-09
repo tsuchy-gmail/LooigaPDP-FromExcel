@@ -9,6 +9,7 @@ import {
   UseState,
   ChangeTextFiled,
   ChangeSelect,
+  HandleChange,
 } from "../../utils/types";
 
 type Organizations = Map<string, { AppId: string; ApiKey: string }>;
@@ -71,19 +72,23 @@ const Organizations: React.VFC<OrganizationsProps> = ({
   const [id, setId] = useState("");
   const [key, setKey] = useState("");
 
-  const handleChangeName: ChangeTextFiled = (event) => {
+  const handleChangeName: HandleChange<ChangeTextFiled> = (event) => {
     setName(event.target.value);
   };
-  const handleChangeId: ChangeTextFiled = (event) => {
+  const handleChangeId: HandleChange<ChangeTextFiled> = (event) => {
     setId(event.target.value);
   };
-  const handleChangeKey: ChangeTextFiled = (event) => {
+  const handleChangeKey: HandleChange<ChangeTextFiled> = (event) => {
     setKey(event.target.value);
   };
 
-  //MaterialUI-SelectのonChangeの都合?に合わせて<{value: unknown}>にしているため型を断定する必要あり
-  const handleChangeSelectedOrganization: ChangeSelect = (event) => {
-    setSelectedOrganization(event.target.value as string);
+  //MaterialUI-SelectのonChangeの都合?に合わせて<{value: unknown}>にしているため型を決める必要あり
+  const handleChangeSelectedOrganization: HandleChange<ChangeSelect> = (
+    event
+  ) => {
+    const selectedValue = event.target.value;
+    if (typeof selectedValue === "string")
+      setSelectedOrganization(selectedValue);
   };
 
   const clearAllField = () => {

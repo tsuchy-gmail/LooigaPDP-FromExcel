@@ -16,6 +16,10 @@ import MuiFab from "@material-ui/core/Fab";
 
 import Paper from "../atoms/Paper";
 
+import { HandleChange, ChangeTextFiled, ChangeSelect } from "../../utils/types";
+
+import { CarrierSettingsValues } from "../organisms/CarriersSettings";
+
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
@@ -53,24 +57,35 @@ const CheckboxWrapper = styled.div`
 const carrierCountOptions = [...new Array(50).keys()].map((count) => count + 1); //[1,2,3,.....50]
 
 type CarrierSettingsRowProps = {
-  deleteRow: () => void;
+  deleteSettingsRow: () => void;
+  carrierSettingsMap: Map<string, CarrierSettingsValues>;
+  getHandleChangeSettings: (
+    settingItem: string
+  ) => HandleChange<ChangeTextFiled | ChangeSelect>;
 };
 
-const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({ deleteRow }) => {
+const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
+  deleteSettingsRow,
+  carrierSettingsMap,
+  getHandleChangeSettings,
+}) => {
+  //
+  console.log("carrierSettingsMap = ", carrierSettingsMap);
+  //
   const width = 120;
+
   const [isOpen, setIsOpen] = React.useState(false);
   const handleChange = () => {
     setIsOpen((isOpen) => !isOpen);
   };
-  const [checked, setChecked] = React.useState(true);
 
   return (
-    <Paper opacity={checked ? 1 : 0.5} minWidth="800px" elevation={3}>
+    <Paper minWidth="800px" elevation={3}>
       <Wrapper>
         <CheckCircleWrapper>
           <Checkbox
-            value={checked}
-            onChange={() => setChecked(!checked)}
+            value={carrierSettingsMap.get("isRowChecked")}
+            onChange={getHandleChangeSettings("isRowChecked")}
             checkedIcon={<Icon type="RadioButtonUnchecked" />}
             icon={<Icon type="CheckCircle" color={primary} />}
             scale={1.4}
@@ -79,13 +94,26 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({ deleteRow }) => {
         <div>
           <MainSettingsWrapper>
             <Select
+              value={carrierSettingsMap.get("carrierCount") as number}
+              onChange={getHandleChangeSettings("carrierCount")}
               items={carrierCountOptions}
               weight={700}
               width={width}
               label="車両台数"
             />
-            <TextField width={width} label="積載容量" />
-            <TimePicker width={width} label="出発時刻" />
+            <TextField
+              value={carrierSettingsMap.get("capacity") as string}
+              onChange={getHandleChangeSettings("capacity")}
+              width={width}
+              label="積載容量"
+              shrink={true}
+            />
+            <TimePicker
+              width={width}
+              label="出発時刻"
+              value={carrierSettingsMap.get("departureTime") as string}
+              onChange={getHandleChangeSettings("departureTime")}
+            />
             <TimePicker width={width} label="帰着時刻" />
             <CheckboxWrapper>
               <CheckboxWithText
@@ -100,13 +128,26 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({ deleteRow }) => {
 
           {isOpen && (
             <BreakSettingsWrapper>
-              <TimePicker width={width} label="休憩開始(可能)" />
+              <TimePicker
+                width={width}
+                label="休憩開始(可能)"
+                value={carrierSettingsMap.get("breakReadyTime") as string}
+                onChange={getHandleChangeSettings("breakReadyTime")}
+              />
               <TimePicker width={width} label="休憩終了(可能)" />
-              <TextField width={width} label="休憩時間" end="min" />
+              <TextField
+                width={width}
+                label="休憩時間"
+                end="min"
+                shrink={true}
+              />
             </BreakSettingsWrapper>
           )}
         </div>
-        <MuiIconButton style={{ marginLeft: "80px" }} onClick={deleteRow}>
+        <MuiIconButton
+          style={{ marginLeft: "80px" }}
+          onClick={deleteSettingsRow}
+        >
           <Icon type="DeleteSweep" color={secondary} />
         </MuiIconButton>
       </Wrapper>

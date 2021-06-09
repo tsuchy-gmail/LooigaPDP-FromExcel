@@ -10,6 +10,7 @@ import {
   UseState,
   ChangeTextFiled,
   ChangeSelect,
+  HandleChange,
 } from "../../utils/types";
 
 type Depots = Map<string, { lat: number; lng: number }>;
@@ -50,21 +51,22 @@ const Depots: React.VFC<DepotsProps> = ({
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
 
-  const handleChangeName: ChangeTextFiled = (event) => {
+  const handleChangeName: HandleChange<ChangeTextFiled> = (event) => {
     setName(event.target.value);
   };
-  const handleChangeLat: ChangeTextFiled = (event) => {
+  const handleChangeLat: HandleChange<ChangeTextFiled> = (event) => {
     setLat(event.target.value);
     const e = event.nativeEvent;
     console.log(e);
   };
-  const handleChangeLng: ChangeTextFiled = (event) => {
+  const handleChangeLng: HandleChange<ChangeTextFiled> = (event) => {
     setLng(event.target.value);
   };
 
-  //MaterialUI-SelectのonChangeの都合?に合わせて<{value: unknown}>にしているため型を断定する必要あり
-  const handleChangeSelectedDepot: ChangeSelect = (event) => {
-    setSelectedDepot(event.target.value as string);
+  //MaterialUI-SelectのonChangeの都合?に合わせて<{value: unknown}>にしているため型を決める必要あり
+  const handleChangeSelectedDepot: HandleChange<ChangeSelect> = (event) => {
+    const selectedValue = event.target.value;
+    if (typeof selectedValue === "string") setSelectedDepot(selectedValue);
   };
 
   const clearAllField = () => {

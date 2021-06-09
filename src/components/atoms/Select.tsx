@@ -1,11 +1,12 @@
 import React, { VFC } from "react";
 import {
-  Select,
   FormControl,
   FormHelperText,
   MenuItem,
   InputLabel,
 } from "@material-ui/core";
+
+import MuiSelect from "@material-ui/core/Select";
 
 type SelectProps = Partial<{
   items: (string | number)[];
@@ -15,11 +16,12 @@ type SelectProps = Partial<{
   size: string;
   weight: number;
   parentRef: React.RefObject<HTMLInputElement>;
-  value: string;
+  value: string | number;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  shrink: boolean;
 }>;
 
-const MySelect: VFC<SelectProps> = ({
+const Select: VFC<SelectProps> = ({
   items,
   width,
   label,
@@ -29,6 +31,7 @@ const MySelect: VFC<SelectProps> = ({
   parentRef,
   value,
   onChange,
+  shrink,
 }) => {
   const formControlStyle = {
     width: width ?? "100%",
@@ -46,8 +49,8 @@ const MySelect: VFC<SelectProps> = ({
   return (
     <div>
       <FormControl style={formControlStyle}>
-        {label && <InputLabel>{label}</InputLabel>}
-        <Select
+        {label && <InputLabel shrink={shrink ?? true}>{label}</InputLabel>}
+        <MuiSelect
           value={value}
           onChange={onChange}
           style={selectStyle}
@@ -60,11 +63,11 @@ const MySelect: VFC<SelectProps> = ({
                 {item}
               </MenuItem>
             ))}
-        </Select>
+        </MuiSelect>
         {helper && <FormHelperText>{helper}</FormHelperText>}
       </FormControl>
     </div>
   );
 };
 
-export default MySelect;
+export default Select;

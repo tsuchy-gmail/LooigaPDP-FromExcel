@@ -8,7 +8,7 @@ import Paper from "../atoms/Paper";
 import DialogButton from "../atoms/DialogButton";
 import Text from "../atoms/Text";
 
-import { ChangeSelect } from "../../utils/types";
+import { ChangeSelect, HandleChange } from "../../utils/types";
 
 const UpperSideWrapper = styled.div`
   display: flex;
@@ -48,7 +48,7 @@ type IconTextWithSelectProps = {
   handleRegister: () => void;
   alertMessage: string;
   value: string;
-  onChange: ChangeSelect;
+  onChange: HandleChange<ChangeSelect>;
 };
 
 const IconTextWithSelect: React.VFC<Partial<IconTextWithSelectProps>> = ({
