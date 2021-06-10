@@ -171,4 +171,4 @@ const Organizations: React.VFC<OrganizationsProps> = ({
   );
 };
 
-export default Organizations;
+export default React.memo(Organizations);

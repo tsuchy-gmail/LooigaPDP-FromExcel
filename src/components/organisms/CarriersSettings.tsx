@@ -141,4 +141,4 @@ const CarriersSettings: React.VFC<CarriersProps> = ({
   );
 };
 
-export default CarriersSettings;
+export default React.memo(CarriersSettings);

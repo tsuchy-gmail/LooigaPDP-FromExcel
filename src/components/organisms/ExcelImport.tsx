@@ -17,4 +17,4 @@ const ExcelImport: React.VFC<ExcelImportProps> = ({ parentRef }) => {
   );
 };
 
-export default ExcelImport;
+export default React.memo(ExcelImport);

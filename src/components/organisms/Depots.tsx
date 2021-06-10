@@ -148,4 +148,4 @@ const Depots: React.VFC<DepotsProps> = ({
   );
 };
 
-export default Depots;
+export default React.memo(Depots);

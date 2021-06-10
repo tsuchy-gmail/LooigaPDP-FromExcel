@@ -19,4 +19,4 @@ const ProjectName: React.VFC<Partial<ProjectNameProps>> = ({ parentRef }) => {
   );
 };
 
-export default ProjectName;
+export default React.memo(ProjectName);

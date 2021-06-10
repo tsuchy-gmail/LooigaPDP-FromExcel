@@ -50,4 +50,4 @@ const ProjectDate: React.VFC<ProjectDateProps> = ({ projectDateState }) => {
   );
 };
 
-export default ProjectDate;
+export default React.memo(ProjectDate);

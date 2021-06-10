@@ -50,29 +50,10 @@ function App() {
   //Carriers info
   const carrierSettingsListState = useState([new Map(initialSettingsData)]);
 
-  const [cheked, set] = useState(false);
-  const handle = (event: any) => {
-    set(!cheked);
-    console.log(event.target.checked);
-  };
-  console.log("App");
-
   return (
     <div style={{ background: "#F4F5F6", padding: "30px 0" }}>
       <Paper elevation={2}>
-        <Select onChange={(event: any) => console.log(event.target)}>
-          <MenuItem value={1}>1</MenuItem>
-          <MenuItem value={2}>2</MenuItem>
-        </Select>
-        <Checkbox onChange={handle} />
-        <MuiTextField
-          onChange={(event: any) => console.log(event.target.type)}
-        />
-        <Select onChange={(event: any) => console.log(event.target)} />
         <ExcelImport parentRef={excelImportRef} />
-        <MuiButton onClick={() => console.log(excelImportRef.current?.value)}>
-          ExcelImport Ref
-        </MuiButton>
         <Organizations
           organizationListState={organizationListState}
           selectedOrganizationState={selectedOrganizationState}
@@ -82,14 +63,6 @@ function App() {
           selectedDepotState={selectedDepotState}
         />
         <ProjectName parentRef={projectNameRef} />
-        <MuiButton
-          onClick={() => {
-            if (projectNameRef.current?.files)
-              console.log(projectNameRef.current.files[0]);
-          }}
-        >
-          ProjectName Ref
-        </MuiButton>
         <ProjectDate projectDateState={projectDateState} />
         <CarriersSettings carrierSettingsListState={carrierSettingsListState} />
         <RequestFloatButton />

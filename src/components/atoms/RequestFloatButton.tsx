@@ -29,4 +29,4 @@ const RequestFloatButton = () => {
   );
 };
 
-export default RequestFloatButton;
+export default React.memo(RequestFloatButton);
