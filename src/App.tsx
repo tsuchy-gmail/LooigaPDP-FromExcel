@@ -2,7 +2,9 @@ import React, { useState, useRef } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import styled from "styled-components";
-import CarriersSettings from "./components/organisms/CarriersSettings";
+import CarriersSettings, {
+  initialSettingsData,
+} from "./components/organisms/CarriersSettings";
 import DatePicker from "./components/atoms/DatePicker";
 
 import ProjectName from "./components/organisms/ProjectName";
@@ -46,7 +48,7 @@ function App() {
   const projectDateState = useState<Date | null>(new Date());
 
   //Carriers info
-  const carrierListState = useState<Map<string, unknown>[]>();
+  const carrierSettingsListState = useState([new Map(initialSettingsData)]);
 
   const [cheked, set] = useState(false);
   const handle = (event: any) => {
@@ -89,7 +91,7 @@ function App() {
           ProjectName Ref
         </MuiButton>
         <ProjectDate projectDateState={projectDateState} />
-        <CarriersSettings />
+        <CarriersSettings carrierSettingsListState={carrierSettingsListState} />
         <RequestFloatButton />
       </Paper>
     </div>

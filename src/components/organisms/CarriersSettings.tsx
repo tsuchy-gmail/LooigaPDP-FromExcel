@@ -9,7 +9,12 @@ import MuiPaper from "@material-ui/core/Paper";
 import Fab from "@material-ui/core/Fab";
 import IconText from "../molecules/IconText";
 
-import { ChangeInput, ChangeSelect, HandleChange } from "../../utils/types";
+import {
+  ChangeInput,
+  ChangeSelect,
+  HandleChange,
+  UseState,
+} from "../../utils/types";
 
 //---styled
 const ContentsWrapper = styled.div`
@@ -28,9 +33,28 @@ const CarrierSettingsRowsWrapper = styled.div`
 `;
 //---
 
+//initial data  for each row
+export const initialSettingsData = new Map<string, CarrierSettingsValues>([
+  ["isRowChecked", true],
+  ["carrierCount", 10],
+  ["capacity", 200],
+  ["departureTime", "09:00"],
+  ["arrivalTime", "17:00"],
+  ["enableBreak", false],
+  ["breakReadyTime", "12:00"],
+  ["breakDueTime", "14:00"],
+  ["breakDuration", 60],
+]);
+
 export type CarrierSettingsValues = boolean | number | string;
 
-const CarriersSettings = () => {
+type CarriersProps = {
+  carrierSettingsListState: UseState<Map<string, CarrierSettingsValues>[]>;
+};
+
+const CarriersSettings: React.VFC<CarriersProps> = ({
+  carrierSettingsListState,
+}) => {
   console.log("Carrier");
   //---rows for view
   const [carrierSettingsRows, setCarrierSettingsRows] = useState([
@@ -55,25 +79,12 @@ const CarriersSettings = () => {
   };
   //---
 
-  //---data in each row
-  const initialCarrierSetttings = new Map<string, CarrierSettingsValues>([
-    ["isRowChecked", true],
-    ["carrierCount", 10],
-    ["capacity", 200],
-    ["departureTime", "09:00"],
-    ["arrivalTime", "17:00"],
-    ["enableBreak", false],
-    ["breakReadyTime", "12:00"],
-    ["breakDueTime", "14:00"],
-    ["breakDuration", 60],
-  ]);
+  //---handling data for each row
 
-  const [listOfSettingsMap, setListOfSettingsMap] = useState([
-    initialCarrierSetttings,
-  ]);
+  const [listOfSettingsMap, setListOfSettingsMap] = carrierSettingsListState;
 
   const addRoomOfSettings = () => {
-    setListOfSettingsMap([...listOfSettingsMap, initialCarrierSetttings]);
+    setListOfSettingsMap([...listOfSettingsMap, new Map(initialSettingsData)]);
   };
 
   const deleteSettingsMap = (index: number) => {
@@ -82,7 +93,7 @@ const CarriersSettings = () => {
   };
   //---
 
-  //---handleChangeSettings
+  //--- 一つの関数にまとめたい - mapする時にpropsとして渡しやすい
   type GetWrappedHandleChange = {
     (index: number): (
       settinItem: string
