@@ -15,6 +15,7 @@ type DialogProps = {
   canExecute: boolean;
   handleExecution: () => void;
   alertMessage: string;
+  autoFocus: boolean;
 };
 
 type DialogButtonProps = ButtonProps & DialogProps;
@@ -31,6 +32,7 @@ const DialogButton: React.FC<Partial<DialogButtonProps>> = ({
   children,
   alertMessage,
   handleExecution,
+  autoFocus,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -66,7 +68,7 @@ const DialogButton: React.FC<Partial<DialogButtonProps>> = ({
         <DialogContent>{children}</DialogContent>
         <DialogActions>
           <Button onClick={handleClickClose}>キャンセル</Button>
-          <Button onClick={handleExecutionWithClose}>
+          <Button onClick={handleExecutionWithClose} autoFocus={autoFocus}>
             {actionText ?? "someAction"}
           </Button>
         </DialogActions>

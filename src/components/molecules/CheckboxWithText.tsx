@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import MuiFormControlLabel from "@material-ui/core/FormControlLabel";
 
 import Checkbox from "../atoms/Checkbox";
 import Text from "../atoms/Text";
@@ -7,9 +8,8 @@ import { TextProps } from "../atoms/Text";
 import { CheckboxProps } from "../atoms/Checkbox";
 import Icon from "../atoms/Icon";
 
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
+const TextWrapper = styled.div`
+  margin-bottom: -2px;
 `;
 
 type CheckboxWithTextProps = Partial<TextProps & CheckboxProps>;
@@ -24,12 +24,16 @@ const CheckboxWithText: React.FC<CheckboxWithTextProps> = ({
   ...checkboxProps
 }) => {
   return (
-    <Wrapper>
-      <Checkbox {...checkboxProps} />
-      <Text size={size} weight={weight} color={color}>
-        {children}
-      </Text>
-    </Wrapper>
+    <MuiFormControlLabel
+      control={<Checkbox {...checkboxProps} />}
+      label={
+        <TextWrapper>
+          <Text size={size} weight={weight} color={color}>
+            {children}
+          </Text>
+        </TextWrapper>
+      }
+    />
   );
 };
 

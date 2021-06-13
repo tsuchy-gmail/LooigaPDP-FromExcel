@@ -7,8 +7,8 @@ import Icon from "../atoms/Icon";
 import Button from "../atoms/Button";
 import Text from "../atoms/Text";
 import Checkbox from "../atoms/Checkbox";
-import CheckboxWithText from "../molecules/CheckboxWithText";
-import { disable, secondary, primary } from "../../utils/colors";
+import CheckboxWithText from "./CheckboxWithText";
+import { disable, secondary, primary, off } from "../../utils/colors";
 
 import MuiIconButton from "@material-ui/core/IconButton";
 import MuiPaper from "@material-ui/core/Paper";
@@ -18,7 +18,7 @@ import Paper from "../atoms/Paper";
 
 import { HandleChange, ChangeInput, ChangeSelect } from "../../utils/types";
 
-import { CarrierSettingsValues } from "../organisms/CarriersSettings";
+import { CarrierSettingsValues } from "../organisms/Carriers";
 
 //--styled
 const Wrapper = styled.div`
@@ -55,11 +55,11 @@ const CheckboxWrapper = styled.div`
 `;
 
 const CheckCircleWrapper = styled.div`
-  margin-right: 80px;
+  margin-right: 70px;
 `;
 
 const IconButtonWrapper = styled.div`
-  margin-left: 80px;
+  margin-left: 70px;
   margin-top: -2px;
 `;
 
@@ -97,7 +97,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
 
   const paperStyle = {
     minWidth: "800px",
-    background: isRowChecked ? "" : "rgba(200,200,200,0.3)",
+    background: isRowChecked ? "" : off,
   };
 
   return (

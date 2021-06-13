@@ -10,6 +10,7 @@ import MuiSelect from "@material-ui/core/Select";
 
 type SelectProps = Partial<{
   items: (string | number)[];
+  valueList: (string | number)[];
   width: number | string;
   label: string;
   helper: string;
@@ -19,10 +20,12 @@ type SelectProps = Partial<{
   value: string | number;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   shrink: boolean;
+  innerPaddingBottom: string;
 }>;
 
 const Select: VFC<SelectProps> = ({
   items,
+  valueList,
   width,
   label,
   helper,
@@ -32,6 +35,7 @@ const Select: VFC<SelectProps> = ({
   value,
   onChange,
   shrink,
+  innerPaddingBottom,
 }) => {
   const formControlStyle = {
     width: width ?? "100%",
@@ -43,7 +47,13 @@ const Select: VFC<SelectProps> = ({
   };
 
   const menuItemStyle = {
-    fontWeight: 700,
+    fontWeight: weight ?? 700,
+  };
+
+  const selectDisplayProps = {
+    style: {
+      paddingBottom: innerPaddingBottom,
+    },
   };
 
   return (
@@ -55,11 +65,15 @@ const Select: VFC<SelectProps> = ({
           onChange={onChange}
           style={selectStyle}
           inputRef={parentRef}
+          SelectDisplayProps={selectDisplayProps}
         >
-          <MenuItem>-</MenuItem>
           {items &&
-            items.map((item) => (
-              <MenuItem key={item} value={item} style={menuItemStyle}>
+            items.map((item, index) => (
+              <MenuItem
+                key={item}
+                value={valueList ? valueList[index] : item}
+                style={menuItemStyle}
+              >
                 {item}
               </MenuItem>
             ))}

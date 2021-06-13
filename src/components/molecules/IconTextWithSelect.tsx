@@ -89,6 +89,7 @@ const IconTextWithSelect: React.VFC<Partial<IconTextWithSelectProps>> = ({
                 <IconText type="DeleteSweep" text={rightButtonText} />
               }
               actionText="削除"
+              autoFocus
             >
               {deleteDialog}
             </DialogButton>

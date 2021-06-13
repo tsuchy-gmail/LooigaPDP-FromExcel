@@ -10,6 +10,7 @@ export type ButtonProps = {
   onClick?: () => void;
   component?: string;
   disabled?: boolean;
+  autoFocus?: boolean;
 };
 
 type ButtonStyle = {

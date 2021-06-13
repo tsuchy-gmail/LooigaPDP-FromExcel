@@ -1,5 +1,6 @@
-import React, { VFC } from "react";
+import React, { VFC, RefObject, useState, useEffect } from "react";
 import MuiTextField from "@material-ui/core/TextField";
+import { ChangeInput } from "../../utils/types";
 
 export type TextFieldProps = Partial<{
   width: number | string;
@@ -12,9 +13,9 @@ export type TextFieldProps = Partial<{
   type: string;
   shrink: boolean;
   autoFocus: boolean;
-  parentRef: React.RefObject<HTMLInputElement>;
+  parentRef: RefObject<HTMLInputElement>;
   value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: ChangeInput) => void;
 }>;
 
 const TextField: VFC<TextFieldProps> = ({
@@ -48,6 +49,15 @@ const TextField: VFC<TextFieldProps> = ({
     shrink: shrink,
   };
 
+  const [valueForDisplay, setValueForDisplay] = React.useState<string>();
+  const handleChangeValueForDisplay = (event: ChangeInput) => {
+    setValueForDisplay(event.target.value);
+  };
+
+  useEffect(() => {
+    setValueForDisplay(value);
+  }, [value]);
+
   return (
     <div>
       <MuiTextField
@@ -60,8 +70,9 @@ const TextField: VFC<TextFieldProps> = ({
         type={type}
         autoFocus={autoFocus}
         inputRef={parentRef}
-        value={value}
-        onChange={onChange}
+        value={valueForDisplay}
+        onChange={handleChangeValueForDisplay}
+        onBlur={onChange as any}
       />
     </div>
   );

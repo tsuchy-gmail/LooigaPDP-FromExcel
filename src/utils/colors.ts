@@ -9,3 +9,4 @@ export const disable = "#BDBDBD";
 
 //favorite
 export const lightBlack = "#333333";
+export const off = "rgba(200,200,200,0.3)";

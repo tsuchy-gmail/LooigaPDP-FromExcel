@@ -18,7 +18,7 @@ import {
 
 //---styled
 const ContentsWrapper = styled.div`
-  width: 1030px;
+  width: 1050px;
   margin: 0 auto;
 `;
 
@@ -34,7 +34,7 @@ const CarrierSettingsRowsWrapper = styled.div`
 //---
 
 //initial data  for each row
-export const initialSettingsData = new Map<string, CarrierSettingsValues>([
+export const initialCarrierSettings = new Map<string, CarrierSettingsValues>([
   ["isRowChecked", true],
   ["carrierCount", 10],
   ["capacity", 200],
@@ -52,9 +52,7 @@ type CarriersProps = {
   carrierSettingsListState: UseState<Map<string, CarrierSettingsValues>[]>;
 };
 
-const CarriersSettings: React.VFC<CarriersProps> = ({
-  carrierSettingsListState,
-}) => {
+const Carriers: React.VFC<CarriersProps> = ({ carrierSettingsListState }) => {
   console.log("Carrier");
   //---rows for view
   const [carrierSettingsRows, setCarrierSettingsRows] = useState([
@@ -84,7 +82,10 @@ const CarriersSettings: React.VFC<CarriersProps> = ({
   const [listOfSettingsMap, setListOfSettingsMap] = carrierSettingsListState;
 
   const addRoomOfSettings = () => {
-    setListOfSettingsMap([...listOfSettingsMap, new Map(initialSettingsData)]);
+    setListOfSettingsMap([
+      ...listOfSettingsMap,
+      new Map(initialCarrierSettings),
+    ]);
   };
 
   const deleteSettingsMap = (index: number) => {
@@ -141,4 +142,4 @@ const CarriersSettings: React.VFC<CarriersProps> = ({
   );
 };
 
-export default React.memo(CarriersSettings);
+export default React.memo(Carriers);
