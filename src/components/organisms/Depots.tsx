@@ -38,6 +38,8 @@ const RegisterDialogWrapper = styled.div`
   }
 `;
 
+//デポ名に重複が無いようvalidationをかけたいため,デポ名をkeyとする   
+//'名古屋駅' という入力がある時depotList.has('名古屋駅')としたい
 export const initialDepot = new Map([
   [
     "名古屋駅",

@@ -3,7 +3,7 @@ export const getFormattedCarrierSettingsList = (carrierSettingsList: any) => {
   const carriers = [] as any;
   carrierSettingsList
     .filter((carrierSettings: any) => carrierSettings.get("isRowChecked"))
-    .forEach((carrierSettings: any) => {
+    .forEach((carrierSettings: any, index: number) => {
       const getSetting = (settingItem: any) => carrierSettings.get(settingItem);
 
       const startDepotId = getSetting("startDepotId");
@@ -19,6 +19,10 @@ export const getFormattedCarrierSettingsList = (carrierSettingsList: any) => {
       const formattedSettings = {
         //   startTime: getSetting("startTime"),
         //   endTime: getSetting("endTime"),
+        startTime: new Date()
+          .toISOString()
+          .replace(/T...../, "T07:00")
+          .replace(/....Z/, "+09:00"),
       } as any;
 
       if (getSetting("enableMultiDepot")) {
@@ -28,7 +32,7 @@ export const getFormattedCarrierSettingsList = (carrierSettingsList: any) => {
       if (getSetting("enableBreak")) formattedSettings["break"] = breakSetting;
 
       for (let i = 0; i < getSetting("carrierCount"); i++) {
-        carriers.push(formattedSettings);
+        carriers.push({ ...formattedSettings, id: `${index}-${String(i)}` });
       }
     });
   return carriers;

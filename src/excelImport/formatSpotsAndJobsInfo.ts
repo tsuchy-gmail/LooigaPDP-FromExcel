@@ -12,7 +12,7 @@ export const getFormattedSpotsAndJobs = (
 ) => {
   console.log("arg sheet = ", sheet);
   console.log("!ref = ", sheet["!ref"]);
-  const numberOfSheetRows = sheet["!ref"].replace(/..../, "") - 1;
+  const numberOfSheetRows = Number(sheet["!ref"].replace(/..../, ""));
 
   const getAlphabet = (columnName: any) =>
     mapOfColumnNameAndAlphabet.get(columnName);
@@ -67,7 +67,7 @@ export const getFormattedSpotsAndJobs = (
     const pTrip = getJobInfoAndAddSpot("pLat", "pLng", i);
     const dTrip = getJobInfoAndAddSpot("dLat", "dLng", i);
 
-    jobList.push({ pickup: pTrip, delivery: dTrip });
+    jobList.push({ id: String(i - 2), pickup: pTrip, delivery: dTrip });
   }
 
   return new Map([
