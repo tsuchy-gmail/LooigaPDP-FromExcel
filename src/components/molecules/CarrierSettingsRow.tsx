@@ -1,4 +1,4 @@
-import React, { VFC } from "react";
+import React, { VFC, useState } from "react";
 import styled from "styled-components";
 import Select from "../atoms/Select";
 import TextField from "../atoms/TextField";
@@ -19,9 +19,15 @@ import Paper from "../atoms/Paper";
 import { HandleChange, ChangeInput, ChangeSelect } from "../../utils/types";
 
 import { CarrierSettingsValues } from "../organisms/Carriers";
+import { Depots } from "../organisms/Depots";
 
 //--styled
+
 const Wrapper = styled.div`
+  display: flex;
+`;
+
+const HorizontalWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
@@ -29,29 +35,39 @@ const Wrapper = styled.div`
 const MainSettingsWrapper = styled.div`
   display: flex;
   align-items: center;
-  > * {
-    margin-right: 30px;
-  }
 `;
 
 const BreakSettingsWrapper = styled.div`
   display: flex;
-  margin-top: 20px;
-  > * {
-    :not(:last-child) {
-      margin-right: 30px;
-    }
-  }
+`;
+
+const WithMultiDepot = styled.div`
+  display: flex;
 `;
 
 type IsChecked = { isRowChecked: boolean };
 
 const SettingsWrapper = styled.div`
   opacity: ${(props: IsChecked) => (props.isRowChecked ? 1 : 0.3)};
+  > :not(:first-child) {
+    margin-top: 50px;
+  }
+  > * {
+    > :not(:last-child) {
+      margin-right: 30px;
+    }
+  }
 `;
 
+const checkboxWrapperHeight = 30;
 const CheckboxWrapper = styled.div`
   opacity: ${(props: IsChecked) => (props.isRowChecked ? 1 : 0.3)};
+  margin-left: 40px;
+  display: flex;
+  justify-content: flex-end;
+  height: ${checkboxWrapperHeight}px;
+  margin-top: -${checkboxWrapperHeight * 2}px;
+  margin-bottom: ${checkboxWrapperHeight}px;
 `;
 
 const CheckCircleWrapper = styled.div`
@@ -71,12 +87,14 @@ type CarrierSettingsRowProps = {
   getHandleChangeSettings: (
     settingItem: string
   ) => HandleChange<ChangeInput | ChangeSelect>;
+  depotList: Depots;
 };
 
 const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
   deleteSettingsRow,
   carrierSettingsMap,
   getHandleChangeSettings,
+  depotList,
 }) => {
   //---util
   const carrierCountOptions = [...new Array(50).keys()].map(
@@ -94,15 +112,34 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
 
   const isRowChecked = carrierSettingsMap.get("isRowChecked") as boolean;
   const enableBreak = carrierSettingsMap.get("enableBreak") as boolean;
+  const enableMultiDepot = carrierSettingsMap.get(
+    "enableMultiDepot"
+  ) as boolean;
 
   const paperStyle = {
-    minWidth: "800px",
+    minWidth: "600px",
     background: isRowChecked ? "" : off,
   };
 
   return (
     <Paper elevation={3} {...paperStyle}>
-      <Wrapper>
+      <CheckboxWrapper isRowChecked={isRowChecked}>
+        <CheckboxWithText
+          checked={enableMultiDepot}
+          onChange={getHandleChangeSettings("enableMultiDepot")}
+          weight={enableMultiDepot ? 700 : 400}
+        >
+          マルチデポ
+        </CheckboxWithText>
+        <CheckboxWithText
+          checked={enableBreak}
+          onChange={getHandleChangeSettings("enableBreak")}
+          weight={enableBreak ? 700 : 400}
+        >
+          休憩あり
+        </CheckboxWithText>
+      </CheckboxWrapper>
+      <HorizontalWrapper>
         <CheckCircleWrapper>
           <Checkbox
             checked={isRowChecked}
@@ -113,6 +150,28 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
           />
         </CheckCircleWrapper>
         <SettingsWrapper isRowChecked={isRowChecked as boolean}>
+          {enableMultiDepot && (
+            <WithMultiDepot>
+              <Select
+                {...getStringValueAndOnChange("startDepotId")}
+                items={[...depotList.keys()]}
+                innerValueList={[...depotList.values()].map(
+                  (depotInfo) => depotInfo["id"]
+                )}
+                label="出発デポ"
+                width={width * 2 + 30}
+              />
+              <Select
+                {...getStringValueAndOnChange("endDepotId")}
+                items={[...depotList.keys()]}
+                innerValueList={[...depotList.values()].map(
+                  (depotInfo) => depotInfo["id"]
+                )}
+                label="帰着デポ"
+                width={width * 2 + 30}
+              />
+            </WithMultiDepot>
+          )}
           <MainSettingsWrapper>
             <Select
               value={carrierSettingsMap.get("carrierCount") as number}
@@ -129,12 +188,12 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
               shrink={true}
             />
             <TimePicker
-              {...getStringValueAndOnChange("departureTime")}
+              {...getStringValueAndOnChange("startTime")}
               width={width}
               label="出発時刻"
             />
             <TimePicker
-              {...getStringValueAndOnChange("arrivalTime")}
+              {...getStringValueAndOnChange("endTime")}
               width={width}
               label="帰着時刻"
             />
@@ -161,22 +220,12 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
             </BreakSettingsWrapper>
           )}
         </SettingsWrapper>
-        <CheckboxWrapper isRowChecked={isRowChecked}>
-          <CheckboxWithText
-            checked={enableBreak}
-            onChange={getHandleChangeSettings("enableBreak")}
-            weight={enableBreak ? 700 : 400}
-          >
-            休憩あり
-          </CheckboxWithText>
-        </CheckboxWrapper>
-
         <IconButtonWrapper>
           <MuiIconButton onClick={deleteSettingsRow}>
             <Icon type="DeleteSweep" color={secondary} />
           </MuiIconButton>
         </IconButtonWrapper>
-      </Wrapper>
+      </HorizontalWrapper>
     </Paper>
   );
 };

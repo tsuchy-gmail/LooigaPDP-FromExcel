@@ -13,7 +13,10 @@ import {
   HandleChange,
 } from "../../utils/types";
 
-type Depots = Map<string, { lat: number; lng: number }>;
+export type Depots = Map<
+  string,
+  { name: string; id: string; geocode: { lat: number; lng: number } }
+>;
 
 type DepotValidation = {
   (name: string, lat: string, lng: string, depotList: Depots): string[];
@@ -34,6 +37,13 @@ const RegisterDialogWrapper = styled.div`
     margin-bottom: 20px;
   }
 `;
+
+export const initialDepot = new Map([
+  [
+    "名古屋駅",
+    { name: "名古屋駅", id: "0", geocode: { lat: 35.1705, lng: 136.88193 } },
+  ],
+]);
 
 type DepotsProps = {
   depotListState: UseState<Depots>;
@@ -79,8 +89,9 @@ const Depots: React.VFC<DepotsProps> = ({
 
   const handleRegister = () => {
     const newDepotList = new Map(depotList).set(name, {
-      lat: Number(lat),
-      lng: Number(lng),
+      name,
+      id: String(depotList.size),
+      geocode: { lat: Number(lat), lng: Number(lng) },
     });
     setDepotList(newDepotList);
     clearAllField();

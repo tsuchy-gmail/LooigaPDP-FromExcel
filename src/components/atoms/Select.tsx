@@ -10,7 +10,7 @@ import MuiSelect from "@material-ui/core/Select";
 
 type SelectProps = Partial<{
   items: (string | number)[];
-  valueList: (string | number)[];
+  innerValueList: (string | number)[];
   width: number | string;
   label: string;
   helper: string;
@@ -25,7 +25,7 @@ type SelectProps = Partial<{
 
 const Select: VFC<SelectProps> = ({
   items,
-  valueList,
+  innerValueList,
   width,
   label,
   helper,
@@ -71,7 +71,7 @@ const Select: VFC<SelectProps> = ({
             items.map((item, index) => (
               <MenuItem
                 key={item}
-                value={valueList ? valueList[index] : item}
+                value={innerValueList ? innerValueList[index] : item}
                 style={menuItemStyle}
               >
                 {item}

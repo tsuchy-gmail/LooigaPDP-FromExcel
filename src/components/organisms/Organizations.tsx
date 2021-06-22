@@ -12,7 +12,7 @@ import {
   HandleChange,
 } from "../../utils/types";
 
-type Organizations = Map<string, { AppId: string; ApiKey: string }>;
+type Organizations = Map<string, { AppID: string; ApiKey: string }>;
 
 type OrganizationValidation = {
   (
@@ -32,7 +32,7 @@ const validateNewOrganization: OrganizationValidation = (
   const isAllFilled = !!(name && id && key);
   const isNameUnique = !organizationList.has(name);
   const isIdUnique = ![...organizationList.values()].some(
-    (idAndKey) => idAndKey["AppId"] === id
+    (idAndKey) => idAndKey["AppID"] === id
   );
   const isKeyUnique = ![...organizationList.values()].some(
     (idAndKey) => idAndKey["ApiKey"] === key
@@ -106,7 +106,7 @@ const Organizations: React.VFC<OrganizationsProps> = ({
 
   const handleRegister = () => {
     const newOrganizationsList = new Map(organizationList).set(name, {
-      AppId: id,
+      AppID: id,
       ApiKey: key,
     });
 

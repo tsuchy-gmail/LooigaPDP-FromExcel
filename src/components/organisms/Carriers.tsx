@@ -15,10 +15,11 @@ import {
   HandleChange,
   UseState,
 } from "../../utils/types";
+import { Depots } from "./Depots";
 
 //---styled
 const ContentsWrapper = styled.div`
-  width: 1050px;
+  width: 900px;
   margin: 0 auto;
 `;
 
@@ -33,26 +34,33 @@ const CarrierSettingsRowsWrapper = styled.div`
 `;
 //---
 
-//initial data  for each row
+//initial data for each row
 export const initialCarrierSettings = new Map<string, CarrierSettingsValues>([
   ["isRowChecked", true],
   ["carrierCount", 10],
   ["capacity", 200],
-  ["departureTime", "09:00"],
-  ["arrivalTime", "17:00"],
+  ["startTime", "09:00"],
+  ["endTime", "17:00"],
   ["enableBreak", false],
   ["breakReadyTime", "12:00"],
   ["breakDueTime", "14:00"],
   ["breakDuration", 60],
+  ["enableMultiDepot", false],
+  ["startDepotId", ""],
+  ["endDepotId", ""],
 ]);
 
 export type CarrierSettingsValues = boolean | number | string;
 
 type CarriersProps = {
   carrierSettingsListState: UseState<Map<string, CarrierSettingsValues>[]>;
+  depotList: Depots;
 };
 
-const Carriers: React.VFC<CarriersProps> = ({ carrierSettingsListState }) => {
+const Carriers: React.VFC<CarriersProps> = ({
+  carrierSettingsListState,
+  depotList,
+}) => {
   console.log("Carrier");
   //---rows for view
   const [carrierSettingsRows, setCarrierSettingsRows] = useState([
@@ -80,6 +88,7 @@ const Carriers: React.VFC<CarriersProps> = ({ carrierSettingsListState }) => {
   //---handling data for each row
 
   const [listOfSettingsMap, setListOfSettingsMap] = carrierSettingsListState;
+  console.log("--------- ----------- listOfSettingsMap", listOfSettingsMap);
 
   const addRoomOfSettings = () => {
     setListOfSettingsMap([
@@ -93,6 +102,22 @@ const Carriers: React.VFC<CarriersProps> = ({ carrierSettingsListState }) => {
     setListOfSettingsMap([...listOfSettingsMap]);
   };
   //---
+
+  //localStorageに保存
+  useEffect(() => {
+    console.log("carrierSettingsRows = ", carrierSettingsRows);
+    console.log("carrierSettingsRows is changed");
+  }, [carrierSettingsRows]);
+
+  useEffect(() => {
+    const a = listOfSettingsMap.map((settingsMap) =>
+      JSON.stringify([...settingsMap])
+    );
+    const str = JSON.stringify(a);
+    console.log("str = ", str);
+    const parse = JSON.parse(str).map((el: any) => new Map(JSON.parse(el)));
+    console.log("parse = ", parse);
+  }, [listOfSettingsMap]);
 
   //--- 一つの関数にまとめたい - mapする時にpropsとして渡しやすい
   type GetWrappedHandleChange = {
@@ -129,6 +154,7 @@ const Carriers: React.VFC<CarriersProps> = ({ carrierSettingsListState }) => {
               key={index}
               carrierSettingsMap={listOfSettingsMap[index]}
               getHandleChangeSettings={getWrappedHandleChangeSettings(index)}
+              depotList={depotList}
             />
           ))}
         </CarrierSettingsRowsWrapper>

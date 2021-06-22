@@ -3,13 +3,12 @@ import logo from "./logo.svg";
 import "./App.css";
 import styled from "styled-components";
 import Carriers, {
-  initialSettingsData,
   initialCarrierSettings,
 } from "./components/organisms/Carriers";
 import DatePicker from "./components/atoms/DatePicker";
 
 import ProjectName from "./components/organisms/ProjectName";
-import Depots from "./components/organisms/Depots";
+import Depots, { initialDepot } from "./components/organisms/Depots";
 import Organizations from "./components/organisms/Organizations";
 import IconTextWithInputFileButton from "./components/molecules/IconTextWithInputFileButton";
 import MuiTextField from "@material-ui/core/TextField";
@@ -33,21 +32,21 @@ import TextWithSelect from "./components/molecules/TextWithSelect";
 import Options, {
   initialOptionsSettings,
 } from "./components/organisms/Options";
+import { requestToLoogia } from "./excelImport/excelImport";
 
 const { myorgProd, myorgDev } = organizationsList;
 
 function App() {
   //Organization info
   const organizationListState = useState(
-    new Map([["dev", { AppId: myorgDev.AppID, ApiKey: myorgDev.ApiKey }]])
+    new Map([["dev", { AppID: myorgDev.AppID, ApiKey: myorgDev.ApiKey }]])
   );
   const selectedOrganizationState = useState("");
 
   //Depots info
-  const depotListState = useState(
-    new Map([["名古屋駅", { lat: 35.1705, lng: 136.88193 }]])
-  );
+  const depotListState = useState(new Map(initialDepot));
   const selectedDepotState = useState("");
+  console.log(selectedDepotState[0]);
 
   //ProjectName info
   const projectNameRef = useRef<HTMLInputElement>(null);
@@ -59,26 +58,35 @@ function App() {
   const projectDateState = useState<Date | null>(new Date());
 
   //Carriers info
-  const carrierSettingsListState = useState([new Map(initialCarrierSettings)]);
+  const carrierSettingsListState = useState(
+    localStorage.listOfSettingsMap
+      ? JSON.parse(localStorage.listOfSettingsMap)
+      : [new Map(initialCarrierSettings)]
+  );
 
   //Options info
-  const optionSettingsListState = useState(new Map(initialOptionsSettings));
+  const optionSettingsMapState = useState(new Map(initialOptionsSettings));
 
-  const option = (
-    <Paper
-      elevation={2}
-      width="50%"
-      display="flex"
-      padding="10px"
-      margin="30px auto"
-    >
-      <CheckboxWithText>高速を許可</CheckboxWithText>
-    </Paper>
+  //
+  //
+  //
+  const organization = organizationListState[0].get(
+    selectedOrganizationState[0]
   );
-  const se = { fontWeight: 700 };
-  const si = { fontWeight: 600 };
-  const fi = { fontWeight: 500 };
-  const fo = { fontWeight: 400 };
+  console.log("App.tsx -------");
+  console.log("org = ", organization);
+  const depotList = depotListState[0];
+  const selectedDepotNameAsMapkey = selectedDepotState[0];
+  console.log("depotList = ", depotList);
+  const projectName = projectNameRef.current?.value;
+  console.log("projectName = ", projectName);
+  const carreirList = carrierSettingsListState[0];
+  console.log("carreirList", carreirList);
+  const optionMap = optionSettingsMapState[0];
+  console.log("optionMap = ", optionMap);
+  console.log("excelImportRef = ", excelImportRef.current?.files);
+  console.log("------App.tsx");
+
   return (
     <div style={{ background: "#F4F5F6", padding: "30px 0" }}>
       <Paper elevation={2}>
@@ -93,9 +101,28 @@ function App() {
         />
         <ProjectName parentRef={projectNameRef} />
         <ProjectDate projectDateState={projectDateState} />
-        <Carriers carrierSettingsListState={carrierSettingsListState} />
-        <RequestFloatButton />
-        <Options optionSettingsListState={optionSettingsListState} />
+        <Carriers
+          carrierSettingsListState={carrierSettingsListState}
+          depotList={depotListState[0]}
+        />
+        <RequestFloatButton
+          onClick={() => {
+            if (!excelImportRef.current?.files?.length) {
+              window.alert("Excelファイルを選択して下さい。");
+              return;
+            }
+            requestToLoogia(
+              organization,
+              depotList,
+              selectedDepotNameAsMapkey,
+              projectNameRef.current?.value,
+              (excelImportRef as any).current.files[0],
+              carreirList,
+              optionMap
+            );
+          }}
+        />
+        <Options optionSettingsMapState={optionSettingsMapState} />
       </Paper>
     </div>
   );

@@ -27,7 +27,7 @@ type TextWithSelectProps = Partial<{
   onChange: HandleChange<ChangeSelect>;
   width: string;
   weight: number;
-  valueList: (string | number)[];
+  innerValueList: (string | number)[];
   helper: string;
   label: string;
 }>;

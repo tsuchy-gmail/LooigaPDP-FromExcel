@@ -54,16 +54,20 @@ export const initialOptionsSettings = new Map([
     "balancing",
     {
       checked: false,
-      type: "duration",
-      intensity: 5,
+      value: {
+        type: "duration",
+        intensity: 5,
+      },
     },
   ],
   [
     "turnDirectionRestriction",
     {
       checked: false,
-      direction: "RIGHT",
-      intensity: 5,
+      value: {
+        direction: "RIGHT",
+        intensity: 5,
+      },
     },
   ],
   [
@@ -143,16 +147,22 @@ const listOfKeepStraightDegree = [...oneToTen].filter((number) => number !== 3);
 //
 
 type OptionsProps = {
-  optionSettingsListState: UseState<Map<string, any>>; //any修正
+  optionSettingsMapState: UseState<Map<string, any>>; //any修正
 };
 
-const Options: React.VFC<OptionsProps> = ({ optionSettingsListState }) => {
-  const [optionsSettings, setOptionsSettings] = optionSettingsListState;
-  const getHandleChange = (option: Option, settingItem: string) => (
+const Options: React.VFC<OptionsProps> = ({ optionSettingsMapState }) => {
+  const [optionsSettings, setOptionsSettings] = optionSettingsMapState;
+  const getHandleChange = (option: Option, nestedSetting?: string) => (
     event: ChangeInput | ChangeSelect
   ) => {
-    (optionsSettings as any).get(option)[settingItem] = event.target.value;
-    setOptionsSettings(new Map(optionsSettings));
+    if (nestedSetting) {
+      console.log(optionsSettings.get(option).value);
+      optionsSettings.get(option).value[nestedSetting] = event.target.value;
+      setOptionsSettings(new Map(optionsSettings));
+    } else {
+      optionsSettings.get(option).value = event.target.value;
+      setOptionsSettings(new Map(optionsSettings));
+    }
   };
   const getHandleChangeCheckbox = (option: Option) => () => {
     optionsSettings.get(option).checked = !optionsSettings.get(option).checked;
@@ -180,12 +190,12 @@ const Options: React.VFC<OptionsProps> = ({ optionSettingsListState }) => {
   // 空白ならcheckを解除
   // 範囲外なら上限の900に設定
   const checkCalculationTimeValue = () => {
-    const time = calculationTime.value;
-    if (time !== "") {
-      if (Number(time)) {
+    const inputTime = calculationTime.value;
+    if (inputTime !== "") {
+      if (Number(inputTime)) {
         //入力が正しい数値なら
 
-        if (Number(time) > 900 || Number(time) < 1) {
+        if (Number(inputTime) > 900 || Number(inputTime) < 1) {
           window.alert("1~900秒の範囲で指定する必要があります。");
 
           calculationTime.value = "900";
@@ -220,11 +230,11 @@ const Options: React.VFC<OptionsProps> = ({ optionSettingsListState }) => {
             option="均等化"
             radioDisplayTextList={[...balancingTypeMap.values()]}
             radioValueList={[...balancingTypeMap.keys()]}
-            radioCheckedValue={balancing.type}
+            radioCheckedValue={balancing.value.type}
             onChangeRadio={getHandleChange("balancing", "type")}
             selectItems={oneToTen}
             selectText="均等化度"
-            selectedValue={balancing.intensity}
+            selectedValue={balancing.value.intensity}
             onChnageSelect={getHandleChange("balancing", "intensity")}
           />
           <OptionSettingsRow
@@ -232,14 +242,14 @@ const Options: React.VFC<OptionsProps> = ({ optionSettingsListState }) => {
             option="右左折を抑制"
             radioDisplayTextList={[...turnDirectionTypeMap.values()]}
             radioValueList={[...turnDirectionTypeMap.keys()]}
-            radioCheckedValue={turnDirectionRestriction.direction}
+            radioCheckedValue={turnDirectionRestriction.value.direction}
             onChangeRadio={getHandleChange(
               "turnDirectionRestriction",
               "direction"
             )}
             selectItems={oneToTen}
             selectText="抑制度"
-            selectedValue={turnDirectionRestriction.intensity}
+            selectedValue={turnDirectionRestriction.value.intensity}
             onChnageSelect={getHandleChange(
               "turnDirectionRestriction",
               "intensity"
@@ -251,7 +261,7 @@ const Options: React.VFC<OptionsProps> = ({ optionSettingsListState }) => {
             selectItems={[...allowHighwayTypeMap.values()]}
             selectValueList={[...allowHighwayTypeMap.keys()]}
             selectedValue={allowHighway.value}
-            onChnageSelect={getHandleChange("allowHighway", "value")}
+            onChnageSelect={getHandleChange("allowHighway")}
           />
           <OptionSettingsRow
             {...getCheckedAndOnChange("keepStraight")}
@@ -260,7 +270,7 @@ const Options: React.VFC<OptionsProps> = ({ optionSettingsListState }) => {
             selectedValue={keepStraight.value}
             selectLabel="default 3"
             selectWidth="70px"
-            onChnageSelect={getHandleChange("keepStraight", "value")}
+            onChnageSelect={getHandleChange("keepStraight")}
           />
           <CheckCalculationTimeValue>
             <OptionSettingsRow
@@ -269,7 +279,7 @@ const Options: React.VFC<OptionsProps> = ({ optionSettingsListState }) => {
               textValue={calculationTime.value as string}
               textEnd="sec"
               textLabel="1~900 (sec)"
-              onChangeTextField={getHandleChange("calculationTime", "value")}
+              onChangeTextField={getHandleChange("calculationTime")}
             />
           </CheckCalculationTimeValue>
           <OptionSettingsRow

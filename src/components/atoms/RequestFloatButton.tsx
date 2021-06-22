@@ -16,10 +16,21 @@ const PositionAbsolute = styled.div`
   bottom: 50px;
 `;
 
-const RequestFloatButton = () => {
+type RequestFloatButtonProps = {
+  onClick: any;
+};
+
+const RequestFloatButton: React.VFC<RequestFloatButtonProps> = ({
+  onClick,
+}) => {
   return (
     <PositionAbsolute>
-      <MuiFab variant="extended" color="primary" style={{ padding: "0 20px" }}>
+      <MuiFab
+        onClick={onClick}
+        variant="extended"
+        color="primary"
+        style={{ padding: "0 20px" }}
+      >
         <Icon type="Send" />
         <TextWrapper>
           <Text>Loogiaへ送信</Text>
