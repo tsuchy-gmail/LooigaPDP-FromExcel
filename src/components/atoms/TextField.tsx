@@ -1,4 +1,5 @@
-import React, { VFC, RefObject, useState, useEffect } from "react";
+import { VFC, RefObject, useState, useEffect } from "react";
+import * as React from "react";
 import MuiTextField from "@material-ui/core/TextField";
 import { ChangeInput } from "../../utils/types";
 

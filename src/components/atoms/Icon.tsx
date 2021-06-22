@@ -1,4 +1,4 @@
-import React, { VFC } from "react";
+import { VFC } from "react";
 import * as materialIcons from "@material-ui/icons";
 
 type IconProps = {

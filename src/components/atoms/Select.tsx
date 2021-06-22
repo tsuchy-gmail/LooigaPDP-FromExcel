@@ -1,4 +1,5 @@
-import React, { VFC } from "react";
+import { VFC } from "react";
+import * as React from "react";
 import {
   FormControl,
   FormHelperText,

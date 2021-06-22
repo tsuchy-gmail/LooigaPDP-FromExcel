@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 
 import MuiPaper from "@material-ui/core/Paper";
 

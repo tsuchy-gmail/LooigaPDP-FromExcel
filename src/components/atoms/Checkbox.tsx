@@ -1,4 +1,5 @@
-import React, { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode } from "react";
+import * as React from "react";
 
 import MuiCheckbox from "@material-ui/core/Checkbox";
 import { primary } from "../../utils/colors";

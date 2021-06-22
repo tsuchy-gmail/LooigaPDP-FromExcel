@@ -1,4 +1,4 @@
-import React, { VFC } from "react";
+import { VFC } from "react";
 import TextField, { TextFieldProps } from "./TextField";
 
 const TimePicker: VFC<TextFieldProps> = (props) => {

@@ -1,4 +1,4 @@
-import React, { VFC, FC } from "react";
+import { VFC, FC } from "react";
 
 export type TextProps = {
   size?: string;
