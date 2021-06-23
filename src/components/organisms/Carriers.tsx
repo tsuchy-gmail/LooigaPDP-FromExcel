@@ -6,6 +6,7 @@ import CarrierSettingsRow from "../molecules/CarrierSettingsRow";
 import IconButton from "@material-ui/core/IconButton";
 import Icon from "../atoms/Icon";
 import Paper from "../atoms/Paper";
+import CheckboxWithText from "../molecules/CheckboxWithText";
 import MuiPaper from "@material-ui/core/Paper";
 import Fab from "@material-ui/core/Fab";
 import IconText from "../molecules/IconText";
@@ -16,9 +17,15 @@ import {
   HandleChange,
   UseState,
 } from "../../utils/types";
-import { Depots } from "./Depots";
+import { DepotsType } from "./Depots";
 
 //---styled
+
+const UpperSide = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 const ContentsWrapper = styled.div`
   width: 900px;
   margin: 0 auto;
@@ -36,37 +43,35 @@ const CarrierSettingsRowsWrapper = styled.div`
 //---
 
 //initial data for each row
-export const initialCarrierSettings = new Map<string, CarrierSettingsValues>([
-  ["isRowChecked", true],
-  ["carrierCount", 10],
-  ["capacity", 200],
-  ["startTime", "09:00"],
-  ["endTime", "17:00"],
-  ["enableBreak", false],
-  ["breakReadyTime", "12:00"],
-  ["breakDueTime", "14:00"],
-  ["breakDuration", 60],
-  ["enableMultiDepot", false],
-  ["startDepotId", ""],
-  ["endDepotId", ""],
-]);
+
+//
 
 export type CarrierSettingsValues = boolean | number | string;
 
 type CarriersProps = {
   carrierSettingsListState: UseState<Map<string, CarrierSettingsValues>[]>;
-  depotList: Depots;
+  initialCarrierSettings: Map<string, CarrierSettingsValues>;
+  depotList: DepotsType;
+  selectedDepotName: string;
+  enableMultiDepotState: UseState<boolean>;
 };
 
 const Carriers: React.VFC<CarriersProps> = ({
   carrierSettingsListState,
+  initialCarrierSettings,
   depotList,
+  enableMultiDepotState,
 }) => {
   console.log("Carrier");
   //---rows for view
-  const [carrierSettingsRows, setCarrierSettingsRows] = useState([
-    CarrierSettingsRow,
-  ]);
+  const [carrierSettingsRows, setCarrierSettingsRows] = useState(
+    localStorage.carrierSettingsRowsCount
+      ? [...new Array(JSON.parse(localStorage.carrierSettingsRowsCount))].fill(
+          CarrierSettingsRow
+        )
+      : [CarrierSettingsRow]
+  );
+  const [enableMultiDepot, setEnableMultiDepot] = enableMultiDepotState;
 
   const addSettingsRow = () => {
     setCarrierSettingsRows((currentRows) => [
@@ -104,20 +109,24 @@ const Carriers: React.VFC<CarriersProps> = ({
   };
   //---
 
-  //localStorageに保存
   useEffect(() => {
-    console.log("carrierSettingsRows = ", carrierSettingsRows);
-    console.log("carrierSettingsRows is changed");
+    //localStorageに保存
+    const carrierSettingsRowsCount = carrierSettingsRows.length;
+    localStorage.carrierSettingsRowsCount = JSON.stringify(
+      carrierSettingsRowsCount
+    );
   }, [carrierSettingsRows]);
 
   useEffect(() => {
-    const a = listOfSettingsMap.map((settingsMap) =>
+    //MapオブジェクトがJSON.stringifyで{}になってしまうから、arrayに一度変換してからstringifyする
+    //まずは配列の中のMapをstringify
+    const listOfSettingsMapStringified = listOfSettingsMap.map((settingsMap) =>
       JSON.stringify([...settingsMap])
     );
-    const str = JSON.stringify(a);
-    console.log("str = ", str);
-    const parse = JSON.parse(str).map((el: any) => new Map(JSON.parse(el)));
-    console.log("parse = ", parse);
+    //配列をstringify
+    localStorage.listOfCarrierSettings = JSON.stringify(
+      listOfSettingsMapStringified
+    );
   }, [listOfSettingsMap]);
 
   //--- 一つの関数にまとめたい - mapする時にpropsとして渡しやすい
@@ -146,7 +155,15 @@ const Carriers: React.VFC<CarriersProps> = ({
 
   return (
     <Paper width="93%" margin="0 auto">
-      <IconText type="LocalShipping" text="Carriers" />
+      <UpperSide>
+        <IconText type="LocalShipping" text="Carriers" />
+        <CheckboxWithText
+          checked={enableMultiDepot}
+          onChange={() => setEnableMultiDepot(!enableMultiDepot)}
+        >
+          マルチデポ
+        </CheckboxWithText>
+      </UpperSide>
       <ContentsWrapper>
         <CarrierSettingsRowsWrapper>
           {carrierSettingsRows.map((Row, index) => (
@@ -156,6 +173,7 @@ const Carriers: React.VFC<CarriersProps> = ({
               carrierSettingsMap={listOfSettingsMap[index]}
               getHandleChangeSettings={getWrappedHandleChangeSettings(index)}
               depotList={depotList}
+              enableMultiDepot={enableMultiDepot}
             />
           ))}
         </CarrierSettingsRowsWrapper>

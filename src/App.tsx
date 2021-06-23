@@ -1,52 +1,42 @@
 import { useState, useRef } from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import styled from "styled-components";
 import Carriers, {
-  initialCarrierSettings,
+  CarrierSettingsValues,
 } from "./components/organisms/Carriers";
-import DatePicker from "./components/atoms/DatePicker";
 
 import ProjectName from "./components/organisms/ProjectName";
-import Depots, { initialDepot } from "./components/organisms/Depots";
-import Organizations from "./components/organisms/Organizations";
-import IconTextWithInputFileButton from "./components/molecules/IconTextWithInputFileButton";
-import MuiTextField from "@material-ui/core/TextField";
-
-import MuiButton from "@material-ui/core/Button";
+import Depots, {
+  DepotsType,
+  initialDepot,
+  initialSelectedDepotName,
+} from "./components/organisms/Depots";
+import Organizations, {
+  initialListOfOrganization,
+  initialSelectedOrganization,
+  OrganizationsType,
+} from "./components/organisms/Organizations";
 import Paper from "./components/atoms/Paper";
 import ExcelImport from "./components/organisms/ExcelImport";
 import ProjectDate from "./components/organisms/ProjectDate";
-import { organizationsList } from "./organizationsData";
 import RequestFloatButton from "./components/atoms/RequestFloatButton";
-import MuiSelect from "@material-ui/core/Select";
-import Select from "./components/atoms/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import Checkbox from "@material-ui/core/Checkbox";
-import CheckboxWithText from "./components/molecules/CheckboxWithText";
-import MuiRadio from "@material-ui/core/Radio";
-import Radio from "./components/atoms/Radio";
-import Text from "./components/atoms/Text";
-import OptionSettingsRow from "./components/molecules/OptionSettingsRow";
-import TextWithSelect from "./components/molecules/TextWithSelect";
 import Options, {
   initialOptionsSettings,
 } from "./components/organisms/Options";
 import { requestToLoogia } from "./excelImport/excelImport";
 
-const { myorgProd, myorgDev } = organizationsList;
-
 function App() {
+  const enableMultiDepotState = useState(false);
   //Organization info
   const organizationListState = useState(
-    new Map([["dev", { AppID: myorgDev.AppID, ApiKey: myorgDev.ApiKey }]])
+    new Map(initialListOfOrganization as OrganizationsType)
   );
-  const selectedOrganizationState = useState("");
+  const selectedOrganizationState = useState(initialSelectedOrganization);
 
   //Depots info
-  const depotListState = useState(new Map(initialDepot));
-  const selectedDepotState = useState("");
-  console.log(selectedDepotState[0]);
+  const depotListState = useState(new Map(initialDepot as DepotsType));
+  const selectedDepotNameState = useState(initialSelectedDepotName);
+  const selectedDepotId = (depotListState[0] as any).get(
+    selectedDepotNameState[0]
+  )["id"];
 
   //ProjectName info
   const projectNameRef = useRef<HTMLInputElement>(null);
@@ -55,14 +45,35 @@ function App() {
   const excelImportRef = useRef<HTMLInputElement>(null);
 
   //ProjectDate info
-  const projectDateState = useState<Date | null>(new Date());
+  const projectDateState = useState<Date>(new Date());
 
-  //Carriers info
-  const carrierSettingsListState = useState(
-    localStorage.listOfSettingsMap
-      ? JSON.parse(localStorage.listOfSettingsMap)
-      : [new Map(initialCarrierSettings)]
-  );
+  //Carriers info----------------------------------------------------------------
+  const initialCarrierSettings = new Map<string, CarrierSettingsValues>([
+    ["isRowChecked", true],
+    ["carrierCount", 10],
+    ["capacity", 200],
+    ["startTime", "09:00"],
+    ["endTime", "17:00"],
+    ["enableBreak", false],
+    ["breakReadyTime", "12:00"],
+    ["breakDueTime", "14:00"],
+    ["breakDuration", 60],
+    ["startDepotId", selectedDepotId],
+    ["endDepotId", selectedDepotId],
+  ]);
+
+  //⬇︎ 一度parseすると["[isRowChecked: true]..."]という配列になる
+  //配列の中身をもう一度parseすることで、[[isRowChecked: true]...]というarray in arrayになる
+  //2回目のparseで同時に中身をMap化してようやく元通りになる
+  const initialListOfCarrierSettings = localStorage.listOfCarrierSettings
+    ? JSON.parse(localStorage.listOfCarrierSettings).map(
+        (stringifiedSettings: string) =>
+          new Map(JSON.parse(stringifiedSettings))
+      )
+    : [new Map(initialCarrierSettings)];
+
+  const carrierSettingsListState = useState([...initialListOfCarrierSettings]);
+  //-------------------------------------------------------------------Carriers Info
 
   //Options info
   const optionSettingsMapState = useState(new Map(initialOptionsSettings));
@@ -76,15 +87,18 @@ function App() {
   console.log("App.tsx -------");
   console.log("org = ", organization);
   const depotList = depotListState[0];
-  const selectedDepotNameAsMapkey = selectedDepotState[0];
+  const selectedDepotNameAsMapkey = selectedDepotNameState[0];
   console.log("depotList = ", depotList);
   const projectName = projectNameRef.current?.value;
   console.log("projectName = ", projectName);
   const carreirList = carrierSettingsListState[0];
   console.log("carreirList", carreirList);
+  const enableMultiDepot = enableMultiDepotState[0];
   const optionMap = optionSettingsMapState[0];
   console.log("optionMap = ", optionMap);
   console.log("excelImportRef = ", excelImportRef.current?.files);
+
+  const projectDate = projectDateState[0];
   console.log("------App.tsx");
 
   return (
@@ -97,13 +111,16 @@ function App() {
         />
         <Depots
           depotListState={depotListState}
-          selectedDepotState={selectedDepotState}
+          selectedDepotNameState={selectedDepotNameState}
         />
         <ProjectName parentRef={projectNameRef} />
         <ProjectDate projectDateState={projectDateState} />
         <Carriers
           carrierSettingsListState={carrierSettingsListState}
           depotList={depotListState[0]}
+          selectedDepotName={selectedDepotNameState[0]}
+          enableMultiDepotState={enableMultiDepotState}
+          initialCarrierSettings={initialCarrierSettings}
         />
         <RequestFloatButton
           onClick={() => {
@@ -118,7 +135,9 @@ function App() {
               projectNameRef.current?.value,
               (excelImportRef as any).current.files[0],
               carreirList,
-              optionMap
+              enableMultiDepot,
+              optionMap,
+              projectDate
             );
           }}
         />

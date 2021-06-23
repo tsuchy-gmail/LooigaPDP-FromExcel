@@ -19,7 +19,7 @@ import Paper from "../atoms/Paper";
 import { HandleChange, ChangeInput, ChangeSelect } from "../../utils/types";
 
 import { CarrierSettingsValues } from "../organisms/Carriers";
-import { Depots } from "../organisms/Depots";
+import { DepotsType } from "../organisms/Depots";
 
 //--styled
 
@@ -87,7 +87,8 @@ type CarrierSettingsRowProps = {
   getHandleChangeSettings: (
     settingItem: string
   ) => HandleChange<ChangeInput | ChangeSelect>;
-  depotList: Depots;
+  depotList: DepotsType;
+  enableMultiDepot: boolean;
 };
 
 const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
@@ -95,6 +96,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
   carrierSettingsMap,
   getHandleChangeSettings,
   depotList,
+  enableMultiDepot,
 }) => {
   //---util
   const carrierCountOptions = [...new Array(50).keys()].map(
@@ -112,9 +114,6 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
 
   const isRowChecked = carrierSettingsMap.get("isRowChecked") as boolean;
   const enableBreak = carrierSettingsMap.get("enableBreak") as boolean;
-  const enableMultiDepot = carrierSettingsMap.get(
-    "enableMultiDepot"
-  ) as boolean;
 
   const paperStyle = {
     minWidth: "600px",
@@ -125,16 +124,8 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
     <Paper elevation={3} {...paperStyle}>
       <CheckboxWrapper isRowChecked={isRowChecked}>
         <CheckboxWithText
-          checked={enableMultiDepot}
-          onChange={getHandleChangeSettings("enableMultiDepot")}
-          weight={enableMultiDepot ? 700 : 400}
-        >
-          マルチデポ
-        </CheckboxWithText>
-        <CheckboxWithText
           checked={enableBreak}
           onChange={getHandleChangeSettings("enableBreak")}
-          weight={enableBreak ? 700 : 400}
         >
           休憩あり
         </CheckboxWithText>
@@ -183,6 +174,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
             />
             <TextField
               {...getStringValueAndOnChange("capacity")}
+              type="number"
               width={width}
               label="積載容量"
               shrink={true}
@@ -212,6 +204,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
               />
               <TextField
                 {...getStringValueAndOnChange("breakDuration")}
+                type="number"
                 width={width}
                 label="休憩時間"
                 end="min"

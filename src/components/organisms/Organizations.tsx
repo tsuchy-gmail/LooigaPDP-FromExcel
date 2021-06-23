@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import * as React from "react";
 import styled from "styled-components";
 
 import IconTextWithSelect from "../molecules/IconTextWithSelect";
 import TextField from "../atoms/TextField";
 import Select from "../atoms/Select";
+import { tsuchyDev } from "../../organizationsData";
 import {
   SetState,
   UseState,
@@ -13,14 +14,14 @@ import {
   HandleChange,
 } from "../../utils/types";
 
-type Organizations = Map<string, { AppID: string; ApiKey: string }>;
+export type OrganizationsType = Map<string, { AppID: string; ApiKey: string }>;
 
 type OrganizationValidation = {
   (
     name: string,
     id: string,
     key: string,
-    organizationList: Organizations
+    organizationList: OrganizationsType
   ): string[];
 };
 
@@ -49,6 +50,14 @@ const validateNewOrganization: OrganizationValidation = (
   return alertMessages;
 };
 
+export const initialListOfOrganization = localStorage.organizationList
+  ? new Map(JSON.parse(localStorage.organizationList))
+  : new Map([["dev", { AppID: tsuchyDev.AppID, ApiKey: tsuchyDev.ApiKey }]]);
+
+export const initialSelectedOrganization = localStorage.selectedOrganization
+  ? JSON.parse(localStorage.selectedOrganization)
+  : "dev";
+
 const RegisterDialogWrapper = styled.div`
   > * {
     margin-bottom: 20px;
@@ -56,7 +65,7 @@ const RegisterDialogWrapper = styled.div`
 `;
 
 type OrganizationsProps = {
-  organizationListState: UseState<Organizations>;
+  organizationListState: UseState<OrganizationsType>;
   selectedOrganizationState: UseState<string>;
 };
 
@@ -115,12 +124,26 @@ const Organizations: React.VFC<OrganizationsProps> = ({
     clearAllField();
   };
 
-  //新しい組織がorganizationListに登録されてから処理を行いたいためuseEffect
-  //登録したらその新しい組織を選択するようにする
+  const organizationListSizeRef = useRef(organizationList.size);
   useEffect(() => {
-    const lastItem = [...organizationList.keys()][organizationList.size - 1];
-    setSelectedOrganization(lastItem);
+    //localStorageに追加
+    localStorage.organizationList = JSON.stringify([...organizationList]);
+
+    //新しい組織がorganizationListに登録されてから処理を行いたいためuseEffect
+    //登録したらその新しい組織を選択するようにする
+    if (organizationList.size > organizationListSizeRef.current) {
+      const lastItem = [...organizationList.keys()][organizationList.size - 1];
+      setSelectedOrganization(lastItem);
+
+      organizationListSizeRef.current++;
+    }
   }, [organizationList]);
+
+  useEffect(() => {
+    localStorage.selectedOrganization = JSON.stringify(
+      selectedOrganization
+    );
+  }, [selectedOrganization]);
 
   const registerDialog = (
     <RegisterDialogWrapper>

@@ -9,3 +9,6 @@ export const current = {
   seconds: now.getSeconds(),
   monthDate: `${now.getMonth() + 1}月${now.getDate()}日`,
 };
+
+export const formatDate = (date: Date, time: string) =>
+  date.toISOString().replace(/T.*/, `T${time}:00+09:00`);

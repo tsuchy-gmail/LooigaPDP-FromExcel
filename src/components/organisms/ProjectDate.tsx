@@ -23,14 +23,14 @@ const DatePickerWrapper = styled.div`
 `;
 
 type ProjectDateProps = {
-  projectDateState: UseState<Date | null>;
+  projectDateState: UseState<Date>;
 };
 
 const ProjectDate: React.VFC<ProjectDateProps> = ({ projectDateState }) => {
   const [projectDate, setProjectDate] = projectDateState;
 
   const handleChangeDate = (date: Date | null) => {
-    setProjectDate(date);
+    if (date) setProjectDate(date);
   };
 
   return (

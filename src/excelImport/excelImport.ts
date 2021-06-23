@@ -23,8 +23,9 @@ export const requestToLoogia = async (
   projectName: any,
   excelFile: File,
   carrierSettingsList: any,
+  enableMultiDepot: boolean,
   optionSettingsMap: any,
-  ProjectDate?: any
+  projectDate: Date
 ) => {
   console.log("requestToLoogia -------");
   const sheet = await getSheetFromExcelFile(excelFile);
@@ -34,10 +35,11 @@ export const requestToLoogia = async (
 
   const name = projectName;
   console.log("projectName = ", name);
-  const enableMultiDepot = carrierSettingsList.some((carrierSettings: any) =>
-    carrierSettings.get("enableMultiDepot")
+  const carriers = getFormattedCarrierSettingsList(
+    carrierSettingsList,
+    projectDate,
+    enableMultiDepot
   );
-  const carriers = getFormattedCarrierSettingsList(carrierSettingsList);
   console.log("carriers = ", carriers);
   const spots = getFormattedSpotsAndJobs(sheet, mapOfColumnNameAndAlphabet).get(
     "spots"
@@ -58,6 +60,7 @@ export const requestToLoogia = async (
     option,
   } as any;
 
+  //depot: {}となるかdepots: []となるか分からないから、後から追加
   if (enableMultiDepot) {
     requestBody["depots"] = [...depotList.values()].map((depotData) => ({
       type: "data",

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import * as React from "react";
 import styled from "styled-components";
 
@@ -14,13 +14,13 @@ import {
   HandleChange,
 } from "../../utils/types";
 
-export type Depots = Map<
+export type DepotsType = Map<
   string,
   { name: string; id: string; geocode: { lat: number; lng: number } }
 >;
 
 type DepotValidation = {
-  (name: string, lat: string, lng: string, depotList: Depots): string[];
+  (name: string, lat: string, lng: string, depotList: DepotsType): string[];
 };
 
 const validateNewDepot: DepotValidation = (name, lat, lng, depotList) => {
@@ -39,26 +39,34 @@ const RegisterDialogWrapper = styled.div`
   }
 `;
 
-//デポ名に重複が無いようvalidationをかけたいため,デポ名をkeyとする   
+//デポ名に重複が無いようvalidationをかけたいため,デポ名をkeyとする
 //'名古屋駅' という入力がある時depotList.has('名古屋駅')としたい
-export const initialDepot = new Map([
-  [
-    "名古屋駅",
-    { name: "名古屋駅", id: "0", geocode: { lat: 35.1705, lng: 136.88193 } },
-  ],
-]);
+export const initialDepot = localStorage.depotList
+  ? new Map(JSON.parse(localStorage.depotList))
+  : new Map([
+      [
+        "名古屋駅",
+        {
+          name: "名古屋駅",
+          id: "0",
+          geocode: { lat: 35.1705, lng: 136.88193 },
+        },
+      ],
+    ]);
+
+    export const initialSelectedDepotName = localStorage.selectedDepotName ? JSON.parse(localStorage.selectedDepotName) : '名古屋駅'
 
 type DepotsProps = {
-  depotListState: UseState<Depots>;
-  selectedDepotState: UseState<string>;
+  depotListState: UseState<DepotsType>;
+  selectedDepotNameState: UseState<string>;
 };
 
 const Depots: React.VFC<DepotsProps> = ({
   depotListState,
-  selectedDepotState,
+  selectedDepotNameState,
 }) => {
   const [depotList, setDepotList] = depotListState;
-  const [selectedDepot, setSelectedDepot] = selectedDepotState;
+  const [selectedDepot, setSelectedDepot] = selectedDepotNameState;
 
   const [name, setName] = useState("");
   const [lat, setLat] = useState("");
@@ -99,12 +107,22 @@ const Depots: React.VFC<DepotsProps> = ({
     setDepotList(newDepotList);
     clearAllField();
   };
+  useEffect(() => {}, [depotList]);
 
-  //新しいデポがdepotListに登録されてから処理を行いたいためuseEffect
-  //登録したらその新しい組織を選択するようにする
+  const depotListSizeRef = useRef(depotList.size);
   useEffect(() => {
-    const lastItem = [...depotList.keys()][depotList.size - 1];
-    setSelectedDepot(lastItem);
+    //localStorageに保存
+    localStorage.depotList = JSON.stringify([...depotList]);
+
+    //登録したらその新しい組織を選択するようにする
+    //新しいデポがdepotListに登録されてから処理を行いたいためuseEffect
+
+    if (depotList.size > depotListSizeRef.current) {
+      const lastItem = [...depotList.keys()][depotList.size - 1];
+      setSelectedDepot(lastItem);
+
+      depotListSizeRef.current++;
+    }
   }, [depotList]);
 
   const registerDialog = (
