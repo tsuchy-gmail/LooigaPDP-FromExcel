@@ -34,9 +34,8 @@ function App() {
   //Depots info
   const depotListState = useState(new Map(initialDepot as DepotsType));
   const selectedDepotNameState = useState(initialSelectedDepotName);
-  const selectedDepotId = (depotListState[0] as any).get(
-    selectedDepotNameState[0]
-  )["id"];
+  const selectedDepotId =
+    (depotListState[0] as any).get(selectedDepotNameState[0])["id"] ?? "0";
 
   //ProjectName info
   const projectNameRef = useRef<HTMLInputElement>(null);
