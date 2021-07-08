@@ -5,7 +5,6 @@ import { getFormattedOptions } from "./formatOptionsInfo";
 import { request } from "./post";
 
 const xlsx = require("xlsx");
-console.log("xlsx =", xlsx);
 //excelファイルから扱えるデータに変形
 const getSheetFromExcelFile = async (excelFile: File) => {
   const buffer = await excelFile.arrayBuffer();
@@ -27,30 +26,26 @@ export const requestToLoogia = async (
   optionSettingsMap: any,
   projectDate: Date
 ) => {
-  console.log("requestToLoogia -------");
   const sheet = await getSheetFromExcelFile(excelFile);
-  console.log("SHEET  =", sheet);
   const mapOfColumnNameAndAlphabet = getMapOfColumnNamAndAlphabet(sheet);
-  console.log("mapOfAlphabet = ", mapOfColumnNameAndAlphabet);
 
   const name = projectName;
-  console.log("projectName = ", name);
   const carriers = getFormattedCarrierSettingsList(
     carrierSettingsList,
     projectDate,
     enableMultiDepot
   );
-  console.log("carriers = ", carriers);
-  const spots = getFormattedSpotsAndJobs(sheet, mapOfColumnNameAndAlphabet).get(
-    "spots"
-  );
-  console.log("spots = ", spots);
-  const jobs = getFormattedSpotsAndJobs(sheet, mapOfColumnNameAndAlphabet).get(
-    "jobs"
-  );
-  console.log("jobs = ", jobs);
+  const spots = getFormattedSpotsAndJobs(
+    sheet,
+    mapOfColumnNameAndAlphabet,
+    projectDate
+  ).get("spots");
+  const jobs = getFormattedSpotsAndJobs(
+    sheet,
+    mapOfColumnNameAndAlphabet,
+    projectDate
+  ).get("jobs");
   const option = getFormattedOptions(optionSettingsMap);
-  console.log("option = ", option);
 
   const requestBody = {
     name,
@@ -70,9 +65,6 @@ export const requestToLoogia = async (
 
   const requestBodyJson = JSON.stringify(requestBody);
 
-  console.log("requestBody = ", requestBody);
-  console.log("requestBodyJSON = ", JSON.stringify(requestBody, null, "\t"));
-  console.log("--------requestToLoogia ");
-
+  console.log("requestBody = ", JSON.stringify(requestBody, null, "\t"));
   request(organization, requestBodyJson, enableMultiDepot);
 };

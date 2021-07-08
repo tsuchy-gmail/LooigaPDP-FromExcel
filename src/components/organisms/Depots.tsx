@@ -54,7 +54,9 @@ export const initialDepot = localStorage.depotList
       ],
     ]);
 
-    export const initialSelectedDepotName = localStorage.selectedDepotName ? JSON.parse(localStorage.selectedDepotName) : '名古屋駅'
+export const initialSelectedDepotName = localStorage.selectedDepotName
+  ? JSON.parse(localStorage.selectedDepotName)
+  : "名古屋駅";
 
 type DepotsProps = {
   depotListState: UseState<DepotsType>;
@@ -78,7 +80,6 @@ const Depots: React.VFC<DepotsProps> = ({
   const handleChangeLat: HandleChange<ChangeInput> = (event) => {
     setLat(event.target.value);
     const e = event.nativeEvent;
-    console.log(e);
   };
   const handleChangeLng: HandleChange<ChangeInput> = (event) => {
     setLng(event.target.value);
@@ -107,7 +108,8 @@ const Depots: React.VFC<DepotsProps> = ({
     setDepotList(newDepotList);
     clearAllField();
   };
-  useEffect(() => {}, [depotList]);
+
+  const handleDelete = () => {};
 
   const depotListSizeRef = useRef(depotList.size);
   useEffect(() => {

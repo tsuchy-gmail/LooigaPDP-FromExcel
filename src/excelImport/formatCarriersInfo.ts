@@ -1,37 +1,34 @@
-import { formatDate } from "../utils/date";
+import { getISODateFromDateAndTime } from "../utils/date";
 
 export const getFormattedCarrierSettingsList = (
   carrierSettingsList: any,
   projectDate: Date,
   enableMultiDepot: boolean
 ) => {
-  console.log("list = ", carrierSettingsList);
   const carriers = [] as any;
   carrierSettingsList
     .filter((carrierSettings: any) => carrierSettings.get("isRowChecked"))
     .forEach((carrierSettings: any, index: number) => {
       const getSetting = (settingItem: any) => carrierSettings.get(settingItem);
+      const getISODate = (item: any) =>
+        getISODateFromDateAndTime(projectDate, getSetting(item));
 
       const startDepotId = getSetting("startDepotId");
       const endDepotId = getSetting("endDepotId");
       const breakSetting = {
-        range: {
-          readyTime: getSetting("breakReadyTime"),
-          dueTime: getSetting("breakDueTime"),
-        },
-        duration: getSetting("breakDuration"),
+        ranges: [
+          {
+            readyTime: getISODate("breakReadyTime"),
+            dueTime: getISODate("breakDueTime"),
+          },
+        ],
+        duration: getSetting("breakDuration") * 60,
       };
 
-      console.log("startTime = ", getSetting("startTime"));
-      console.log(
-        "formatedDate = ",
-        formatDate(projectDate, getSetting("startTime"))
-      );
       const formattedSettings = {
-        //   startTime: getSetting("startTime"),
-        //   endTime: getSetting("endTime"),
-        startTime: formatDate(projectDate, getSetting("startTime")),
-        endTime: formatDate(projectDate, getSetting("endTime")),
+        startTime: getISODate("startTime"),
+        endTime: getISODate("endTime"),
+        capacities: [{ dimId: "size", size: Number(getSetting("capacity")) }],
       } as any;
 
       if (enableMultiDepot) {

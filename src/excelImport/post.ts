@@ -14,13 +14,20 @@ export const request = async (
   });
 
   const URL = enableMultiDepot
+    ? "https://loogia.tech/api/v0/multiDepotProjects"
+    : "https://loogia.tech/api/v0/projects";
+
+  const devURL = enableMultiDepot
     ? "https://dev.loogia.tech/api/v0/multiDepotProjects"
     : "https://dev.loogia.tech/api/v0/projects";
 
-  console.log("URL = ", URL);
+  const isOrganizationDev = organization.name === "dev"; //最終的にはdevもこの設定も消す
 
   try {
-    const response = await axios.post(URL, requestBody);
+    const response = await axios.post(
+      isOrganizationDev ? devURL : URL,
+      requestBody
+    );
     window.alert("Success!");
     console.log("response = ", response);
   } catch (error) {

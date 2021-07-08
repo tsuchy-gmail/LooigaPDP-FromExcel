@@ -14,7 +14,10 @@ import {
   HandleChange,
 } from "../../utils/types";
 
-export type OrganizationsType = Map<string, { AppID: string; ApiKey: string }>;
+export type OrganizationsType = Map<
+  string,
+  { name: string; AppID: string; ApiKey: string }
+>;
 
 type OrganizationValidation = {
   (
@@ -52,7 +55,12 @@ const validateNewOrganization: OrganizationValidation = (
 
 export const initialListOfOrganization = localStorage.organizationList
   ? new Map(JSON.parse(localStorage.organizationList))
-  : new Map([["dev", { AppID: tsuchyDev.AppID, ApiKey: tsuchyDev.ApiKey }]]);
+  : new Map([
+      [
+        "dev",
+        { name: "dev", AppID: tsuchyDev.AppID, ApiKey: tsuchyDev.ApiKey },
+      ],
+    ]);
 
 export const initialSelectedOrganization = localStorage.selectedOrganization
   ? JSON.parse(localStorage.selectedOrganization)
@@ -116,6 +124,7 @@ const Organizations: React.VFC<OrganizationsProps> = ({
 
   const handleRegister = () => {
     const newOrganizationsList = new Map(organizationList).set(name, {
+      name,
       AppID: id,
       ApiKey: key,
     });
@@ -140,9 +149,7 @@ const Organizations: React.VFC<OrganizationsProps> = ({
   }, [organizationList]);
 
   useEffect(() => {
-    localStorage.selectedOrganization = JSON.stringify(
-      selectedOrganization
-    );
+    localStorage.selectedOrganization = JSON.stringify(selectedOrganization);
   }, [selectedOrganization]);
 
   const registerDialog = (

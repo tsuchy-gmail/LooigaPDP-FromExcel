@@ -10,6 +10,8 @@ import CheckboxWithText from "../molecules/CheckboxWithText";
 import MuiPaper from "@material-ui/core/Paper";
 import Fab from "@material-ui/core/Fab";
 import IconText from "../molecules/IconText";
+import Switch from "@material-ui/core/Switch";
+import Text from "../atoms/Text";
 
 import {
   ChangeInput,
@@ -62,7 +64,6 @@ const Carriers: React.VFC<CarriersProps> = ({
   depotList,
   enableMultiDepotState,
 }) => {
-  console.log("Carrier");
   //---rows for view
   const [carrierSettingsRows, setCarrierSettingsRows] = useState(
     localStorage.carrierSettingsRowsCount
@@ -94,7 +95,6 @@ const Carriers: React.VFC<CarriersProps> = ({
   //---handling data for each row
 
   const [listOfSettingsMap, setListOfSettingsMap] = carrierSettingsListState;
-  console.log("--------- ----------- listOfSettingsMap", listOfSettingsMap);
 
   const addRoomOfSettings = () => {
     setListOfSettingsMap([
@@ -157,12 +157,14 @@ const Carriers: React.VFC<CarriersProps> = ({
     <Paper width="93%" margin="0 auto">
       <UpperSide>
         <IconText type="LocalShipping" text="Carriers" />
-        <CheckboxWithText
-          checked={enableMultiDepot}
-          onChange={() => setEnableMultiDepot(!enableMultiDepot)}
-        >
-          マルチデポ
-        </CheckboxWithText>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Text>マルチデポ</Text>
+          <Switch
+            color="primary"
+            checked={enableMultiDepot}
+            onChange={() => setEnableMultiDepot(!enableMultiDepot)}
+          />
+        </div>
       </UpperSide>
       <ContentsWrapper>
         <CarrierSettingsRowsWrapper>

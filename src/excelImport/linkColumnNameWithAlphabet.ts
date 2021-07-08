@@ -21,6 +21,9 @@ export const getMapOfColumnNamAndAlphabet = (sheet: any) => {
         case "p_name":
           setToMap("pName");
           break;
+        case "p_address":
+          setToMap("pAddress");
+          break;
         case "p_lat":
           setToMap("pLat");
           break;
@@ -33,6 +36,18 @@ export const getMapOfColumnNamAndAlphabet = (sheet: any) => {
         case "p_tw1e":
           setToMap("pTw1e");
           break;
+        case "p_tw2s":
+          setToMap("pTw2s");
+          break;
+        case "p_tw2e":
+          setToMap("pTw2e");
+          break;
+        case "p_tw3s":
+          setToMap("pTw3s");
+          break;
+        case "p_tw3e":
+          setToMap("pTw3e");
+          break;
         case "p_service_duration":
           setToMap("pServiceDuration");
           break;
@@ -41,6 +56,9 @@ export const getMapOfColumnNamAndAlphabet = (sheet: any) => {
           break;
         case "d_name":
           setToMap("dName");
+          break;
+        case "d_address":
+          setToMap("dAddress");
           break;
         case "d_lat":
           setToMap("dLat");
@@ -53,6 +71,18 @@ export const getMapOfColumnNamAndAlphabet = (sheet: any) => {
           break;
         case "d_tw1e":
           setToMap("dTw1e");
+          break;
+        case "d_tw2s":
+          setToMap("dTw2s");
+          break;
+        case "d_tw2e":
+          setToMap("dTw2e");
+          break;
+        case "d_tw3s":
+          setToMap("dTw3s");
+          break;
+        case "d_tw3e":
+          setToMap("dTw3e");
           break;
         case "d_service_duration":
           setToMap("dServiceDuration");

@@ -156,7 +156,6 @@ const Options: React.VFC<OptionsProps> = ({ optionSettingsMapState }) => {
     event: ChangeInput | ChangeSelect
   ) => {
     if (nestedSetting) {
-      console.log(optionsSettings.get(option).value);
       optionsSettings.get(option).value[nestedSetting] = event.target.value;
       setOptionsSettings(new Map(optionsSettings));
     } else {

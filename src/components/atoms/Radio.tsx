@@ -19,8 +19,6 @@ const Radio: React.VFC<RadioPorps> = ({
   checkedValue,
   onChange,
 }) => {
-  console.log(checkedValue);
-
   return (
     <div>
       {valueList &&

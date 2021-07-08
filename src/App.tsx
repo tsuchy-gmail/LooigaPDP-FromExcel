@@ -22,6 +22,7 @@ import Options, {
   initialOptionsSettings,
 } from "./components/organisms/Options";
 import { requestToLoogia } from "./excelImport/excelImport";
+import Loader from "react-loader-spinner";
 
 function App() {
   const enableMultiDepotState = useState(false);
@@ -83,22 +84,14 @@ function App() {
   const organization = organizationListState[0].get(
     selectedOrganizationState[0]
   );
-  console.log("App.tsx -------");
-  console.log("org = ", organization);
   const depotList = depotListState[0];
   const selectedDepotNameAsMapkey = selectedDepotNameState[0];
-  console.log("depotList = ", depotList);
   const projectName = projectNameRef.current?.value;
-  console.log("projectName = ", projectName);
   const carreirList = carrierSettingsListState[0];
-  console.log("carreirList", carreirList);
   const enableMultiDepot = enableMultiDepotState[0];
   const optionMap = optionSettingsMapState[0];
-  console.log("optionMap = ", optionMap);
-  console.log("excelImportRef = ", excelImportRef.current?.files);
 
   const projectDate = projectDateState[0];
-  console.log("------App.tsx");
 
   return (
     <div style={{ background: "#F4F5F6", padding: "30px 0" }}>

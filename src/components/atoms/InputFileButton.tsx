@@ -23,7 +23,6 @@ const InputFileButton: React.FC<Partial<InputFileButtonProps>> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = event.target.files;
     if (fileList) setFile(fileList[0]);
-    fileList && console.log("file = ", fileList[0]);
   };
 
   const buttonText = file ? (
