@@ -157,9 +157,10 @@ export const getFormattedSpotsAndJobs = (
     pushTimeWindow(dTw2s, dTw2e, dRanges);
     pushTimeWindow(dTw3s, dTw3e, dRanges);
 
-    (job as any)["pickup"]["timeWindow"] = { ranges: pRanges };
-    (job as any)["delivery"]["timeWindow"] = { ranges: dRanges };
-    console.log("job = ", job);
+    if (pRanges.length >= 1)
+      (job as any)["pickup"]["timeWindow"] = { ranges: pRanges };
+    if (dRanges.length >= 1)
+      (job as any)["delivery"]["timeWindow"] = { ranges: dRanges };
 
     jobList.push(job);
   }

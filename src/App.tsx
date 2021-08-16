@@ -36,7 +36,7 @@ function App() {
   const depotListState = useState(new Map(initialDepot as DepotsType));
   const selectedDepotNameState = useState(initialSelectedDepotName);
   const selectedDepotId =
-    (depotListState[0] as any).get(selectedDepotNameState[0])["id"] ?? "0";
+    (depotListState[0] as any).get(selectedDepotNameState[0])?.id ?? "0";
 
   //ProjectName info
   const projectNameRef = useRef<HTMLInputElement>(null);
