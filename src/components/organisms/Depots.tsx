@@ -77,7 +77,6 @@ const Depots: React.VFC<DepotsProps> = ({
   const [deletingDepotName, setDeletingDepotName] = useState(
     depotList.size >= 1 ? [...depotList.keys()][0] : ""
   );
-  console.log("get  = ", depotList.size >= 1 ? [...depotList.keys()][0] : "");
 
   const handleChangeName: HandleChange<ChangeInput> = (event) => {
     setName(event.target.value);

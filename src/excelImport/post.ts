@@ -29,12 +29,10 @@ export const request = async (
       requestBody
     );
     window.alert("Loogiaにリクエストを送信しました。");
-    console.log("response = ", response);
   } catch (error) {
     const errorMessages = error.response.data.detail.map(
       (messageObject: any) => messageObject.message
     );
-    console.log("errorMessages = ", errorMessages);
 
     window.alert(`- Error - \n ${errorMessages.join("\n")}`);
   }

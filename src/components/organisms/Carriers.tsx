@@ -95,7 +95,6 @@ const Carriers: React.VFC<CarriersProps> = ({
   //---handling data for each row
 
   const [listOfSettingsMap, setListOfSettingsMap] = carrierSettingsListState;
-  console.log("listOfSettingsMap = ", listOfSettingsMap);
 
   const addRoomOfSettings = () => {
     setListOfSettingsMap([
