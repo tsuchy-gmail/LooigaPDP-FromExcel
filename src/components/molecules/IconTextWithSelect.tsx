@@ -46,6 +46,7 @@ type IconTextWithSelectProps = {
   deleteDialog: React.ReactElement;
   canRegister: boolean;
   handleRegister: () => void;
+  handleDelete: () => void;
   alertMessage: string;
   value: string;
   onChange: HandleChange<ChangeSelect>;
@@ -64,6 +65,7 @@ const IconTextWithSelect: React.VFC<Partial<IconTextWithSelectProps>> = ({
   canRegister,
   alertMessage,
   handleRegister,
+  handleDelete,
   value,
   onChange,
 }) => {
@@ -90,6 +92,7 @@ const IconTextWithSelect: React.VFC<Partial<IconTextWithSelectProps>> = ({
               }
               actionText="削除"
               autoFocus
+              handleExecution={handleDelete}
             >
               {deleteDialog}
             </DialogButton>

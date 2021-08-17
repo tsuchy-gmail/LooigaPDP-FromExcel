@@ -74,15 +74,23 @@ const Depots: React.VFC<DepotsProps> = ({
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
 
+  const [deletingDepotName, setDeletingDepotName] = useState(
+    depotList.size >= 1 ? [...depotList.keys()][0] : ""
+  );
+  console.log("get  = ", depotList.size >= 1 ? [...depotList.keys()][0] : "");
+
   const handleChangeName: HandleChange<ChangeInput> = (event) => {
     setName(event.target.value);
   };
   const handleChangeLat: HandleChange<ChangeInput> = (event) => {
     setLat(event.target.value);
-    const e = event.nativeEvent;
   };
   const handleChangeLng: HandleChange<ChangeInput> = (event) => {
     setLng(event.target.value);
+  };
+
+  const handleChangeDeletingValue = (event: any) => {
+    setDeletingDepotName(event.target.value);
   };
 
   //MaterialUI-SelectのonChangeの都合?に合わせて<{value: unknown}>にしているため型を決める必要あり
@@ -109,7 +117,10 @@ const Depots: React.VFC<DepotsProps> = ({
     clearAllField();
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    depotList.delete(deletingDepotName);
+    setDepotList(new Map(depotList));
+  };
 
   const depotListSizeRef = useRef(depotList.size);
   useEffect(() => {
@@ -124,6 +135,9 @@ const Depots: React.VFC<DepotsProps> = ({
       setSelectedDepot(lastItem);
 
       depotListSizeRef.current++;
+    }
+    if (depotList.size < depotListSizeRef.current) {
+      depotListSizeRef.current--;
     }
   }, [depotList]);
 
@@ -161,7 +175,12 @@ const Depots: React.VFC<DepotsProps> = ({
 
   const deleteDialog = (
     <div>
-      <Select items={[...depotList.keys()]} width="400px" />
+      <Select
+        items={[...depotList.keys()]}
+        value={deletingDepotName}
+        onChange={handleChangeDeletingValue}
+        width="400px"
+      />
     </div>
   );
 
@@ -176,6 +195,7 @@ const Depots: React.VFC<DepotsProps> = ({
       deleteDialog={deleteDialog}
       alertMessage={validationResult.join("\n")}
       handleRegister={handleRegister}
+      handleDelete={handleDelete}
       value={selectedDepot}
       onChange={handleChangeSelectedDepot}
     />

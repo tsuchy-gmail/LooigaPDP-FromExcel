@@ -60,6 +60,10 @@ function App() {
     ["breakDuration", 60],
     ["startDepotId", selectedDepotId],
     ["endDepotId", selectedDepotId],
+    ["driverId", ""],
+    ["vehicleId", ""],
+    ["maxTotalWorkingDuration", null],
+    ["acceptableLateness", 0],
   ]);
 
   //⬇︎ 一度parseすると["[isRowChecked: true]..."]という配列になる

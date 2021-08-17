@@ -147,7 +147,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
                 {...getStringValueAndOnChange("startDepotId")}
                 items={[...depotList.keys()]}
                 innerValueList={[...depotList.values()].map(
-                  (depotInfo) => depotInfo["id"]
+                  (depotInfo) => depotInfo?.id
                 )}
                 label="出発デポ"
                 width={width * 2 + 30}
@@ -156,7 +156,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
                 {...getStringValueAndOnChange("endDepotId")}
                 items={[...depotList.keys()]}
                 innerValueList={[...depotList.values()].map(
-                  (depotInfo) => depotInfo["id"]
+                  (depotInfo) => depotInfo?.id
                 )}
                 label="帰着デポ"
                 width={width * 2 + 30}
@@ -188,6 +188,36 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
               {...getStringValueAndOnChange("endTime")}
               width={width}
               label="帰着時刻"
+            />
+          </MainSettingsWrapper>
+          <MainSettingsWrapper>
+            <TextField
+              {...getStringValueAndOnChange("driverId")}
+              label="ドライバーID"
+              width={width}
+              shrink={true}
+            />
+            <TextField
+              {...getStringValueAndOnChange("vehicleId")}
+              label="車両ID"
+              width={width}
+              shrink={true}
+            />
+            <TextField
+              {...getStringValueAndOnChange("acceptableLateness")}
+              width={width}
+              label="許容超過時間"
+              type="number"
+              shrink={true}
+              end="min"
+            />
+            <TextField
+              {...getStringValueAndOnChange("maxTotalWorkingDuration")}
+              width={width}
+              label="最大勤務時間"
+              type="number"
+              shrink={true}
+              end="min"
             />
           </MainSettingsWrapper>
           {carrierSettingsMap.get("enableBreak") && (

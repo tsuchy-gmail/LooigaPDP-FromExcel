@@ -109,6 +109,12 @@ export const initialOptionsSettings = new Map([
       checked: false,
     },
   ],
+  [
+    "isFlexibleCarrierStartTime",
+    {
+      checked: false,
+    },
+  ],
 ]);
 
 type OptionsSettings = typeof initialOptionsSettings;
@@ -120,7 +126,8 @@ type Option =
   | "calculationTime"
   | "restrictUturn"
   | "ignoreReturnTrip"
-  | "forceTargetLeft";
+  | "forceTargetLeft"
+  | "isFlexibleCarrierStartTime";
 
 const balancingTypeMap = new Map([
   ["duration", "勤務時間"],
@@ -292,6 +299,13 @@ const Options: React.VFC<OptionsProps> = ({ optionSettingsMapState }) => {
           <OptionSettingsRow
             option="左づけを強制"
             {...getCheckedAndOnChange("forceTargetLeft")}
+          />
+          <OptionSettingsRow
+            option="出発時刻を固定"
+            checked={!optionsSettings.get("isFlexibleCarrierStartTime").checked}
+            onChangeCheckbox={getHandleChangeCheckbox(
+              "isFlexibleCarrierStartTime"
+            )}
           />
         </OptionRowsWrapper>
       </Wrapper>

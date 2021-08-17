@@ -37,6 +37,18 @@ export const getFormattedCarrierSettingsList = (
       }
       if (getSetting("enableBreak")) formattedSettings["break"] = breakSetting;
 
+      const driverId = getSetting("driverId");
+      const vehicleId = getSetting("vehicleId");
+      const acceptableLateness = getSetting("acceptableLateness");
+      const maxTotalWorkingDuration = getSetting("maxTotalWorkingDuration");
+      if (driverId) formattedSettings["driverId"] = driverId;
+      if (vehicleId) formattedSettings["vehicleId"] = vehicleId;
+      if (acceptableLateness)
+        formattedSettings["acceptableLateness"] = acceptableLateness * 60;
+      if (maxTotalWorkingDuration)
+        formattedSettings["maxTotalWorkingDuration"] =
+          maxTotalWorkingDuration * 60;
+
       for (let i = 0; i < getSetting("carrierCount"); i++) {
         carriers.push({ ...formattedSettings, id: `${index}-${String(i)}` });
       }

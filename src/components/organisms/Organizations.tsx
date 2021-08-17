@@ -90,6 +90,10 @@ const Organizations: React.VFC<OrganizationsProps> = ({
   const [id, setId] = useState("");
   const [key, setKey] = useState("");
 
+  const [deletingOrganizationName, setDeletingOrganizationName] = useState(
+    organizationList.size >= 1 ? [...organizationList.keys()][0] : ""
+  );
+
   const handleChangeName: HandleChange<ChangeInput> = (event) => {
     setName(event.target.value);
   };
@@ -98,6 +102,15 @@ const Organizations: React.VFC<OrganizationsProps> = ({
   };
   const handleChangeKey: HandleChange<ChangeInput> = (event) => {
     setKey(event.target.value);
+  };
+
+  const handleChangeDeletingOrganizationName = (event: any) => {
+    setDeletingOrganizationName(event.target.value);
+  };
+
+  const handleDelete = () => {
+    organizationList.delete(deletingOrganizationName);
+    setOrganizationsList(new Map(organizationList));
   };
 
   //MaterialUI-SelectのonChangeの都合?に合わせて<{value: unknown}>にしているため型を決める必要あり
@@ -146,6 +159,9 @@ const Organizations: React.VFC<OrganizationsProps> = ({
 
       organizationListSizeRef.current++;
     }
+    if (organizationList.size < organizationListSizeRef.current) {
+      organizationListSizeRef.current--;
+    }
   }, [organizationList]);
 
   useEffect(() => {
@@ -181,7 +197,12 @@ const Organizations: React.VFC<OrganizationsProps> = ({
 
   const deleteDialog = (
     <div>
-      <Select items={[...organizationList.keys()]} width="400px" />
+      <Select
+        items={[...organizationList.keys()]}
+        value={deletingOrganizationName}
+        onChange={handleChangeDeletingOrganizationName}
+        width="400px"
+      />
     </div>
   );
 
@@ -197,6 +218,7 @@ const Organizations: React.VFC<OrganizationsProps> = ({
       value={selectedOrganization}
       alertMessage={validationResult.join("\n")}
       handleRegister={handleRegister}
+      handleDelete={handleDelete}
       onChange={handleChangeSelectedOrganization}
     />
   );

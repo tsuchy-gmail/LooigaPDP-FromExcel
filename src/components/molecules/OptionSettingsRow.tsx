@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 
 const CheckboxWrapper = styled.div`
   margin-right: 30px;
-  width: 200px;
+  width: 210px;
 `;
 
 const RadioWrapper = styled.div`

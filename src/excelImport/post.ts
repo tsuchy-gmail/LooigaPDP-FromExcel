@@ -28,10 +28,14 @@ export const request = async (
       isOrganizationDev ? devURL : URL,
       requestBody
     );
-    window.alert("Success!");
+    window.alert("Loogiaにリクエストを送信しました。");
     console.log("response = ", response);
   } catch (error) {
-    console.log("- error - ", error);
-    window.alert("- Error -");
+    const errorMessages = error.response.data.detail.map(
+      (messageObject: any) => messageObject.message
+    );
+    console.log("errorMessages = ", errorMessages);
+
+    window.alert(`- Error - \n ${errorMessages.join("\n")}`);
   }
 };
