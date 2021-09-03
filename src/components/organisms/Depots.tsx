@@ -54,8 +54,8 @@ export const initialDepot = localStorage.depotList
       ],
     ]);
 
-export const initialSelectedDepotName = localStorage.selectedDepotName
-  ? JSON.parse(localStorage.selectedDepotName)
+export const initialSelectedDepotName = localStorage.selectedDepot
+  ? JSON.parse(localStorage.selectedDepot)
   : "名古屋駅";
 
 type DepotsProps = {
@@ -139,6 +139,10 @@ const Depots: React.VFC<DepotsProps> = ({
       depotListSizeRef.current--;
     }
   }, [depotList]);
+
+  useEffect(() => {
+    localStorage.selectedDepot = JSON.stringify(selectedDepot);
+  }, [selectedDepot]);
 
   const registerDialog = (
     <RegisterDialogWrapper>

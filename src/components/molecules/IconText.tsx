@@ -11,11 +11,11 @@ export type IconTextProps = {
   weight?: number;
   iconSize?: string;
   textSize?: string;
-  color?: string;
+  iconColor?: string;
+  textColor?: string;
 };
 
 const Wrapper = styled.div`
-  color: ${(props: IconTextProps) => props.color ?? ""};
   display: flex;
   align-items: center;
   > :first-child {
@@ -25,17 +25,18 @@ const Wrapper = styled.div`
 
 const IconText: React.FC<IconTextProps> = ({
   type,
-  color,
   marginRight,
   iconSize,
   textSize,
+  iconColor,
+  textColor,
   weight,
   text,
 }) => {
   return (
-    <Wrapper marginRight={marginRight} color={color}>
-      <Icon type={type} size={iconSize} />
-      <Text size={textSize} weight={weight}>
+    <Wrapper marginRight={marginRight}>
+      <Icon type={type} size={iconSize} color={iconColor} />
+      <Text size={textSize} weight={weight} color={textColor}>
         {text ?? "Apple"}
       </Text>
     </Wrapper>

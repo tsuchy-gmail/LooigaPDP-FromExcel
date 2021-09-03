@@ -3,7 +3,9 @@ const axiosBase = require("axios");
 export const request = async (
   organization: any,
   requestBody: any,
-  enableMultiDepot: any
+  enableMultiDepot: any,
+  setIsRequesting: any,
+  setShowSuccessSnackbar: any
 ) => {
   const axios = axiosBase.create({
     headers: {
@@ -28,8 +30,10 @@ export const request = async (
       isOrganizationDev ? devURL : URL,
       requestBody
     );
-    window.alert("Loogiaにリクエストを送信しました。");
+    setIsRequesting(false);
+    setShowSuccessSnackbar(true);
   } catch (error) {
+    setIsRequesting(false);
     const errorMessages = error.response.data.detail.map(
       (messageObject: any) => messageObject.message
     );

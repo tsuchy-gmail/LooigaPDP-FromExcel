@@ -6,6 +6,8 @@ import IconText from "./IconText";
 
 import Paper from "../atoms/Paper";
 
+import { ChangeInput } from "../../utils/types";
+
 const Wrapper = styled.div`
   & > {
     :first-child {
@@ -23,11 +25,15 @@ type IconTextWithTextFieldProps = {
   iconSize?: string;
   placeholder?: string;
   parentRef?: React.RefObject<HTMLInputElement>;
+  value?: string;
+  onChange?: (event: ChangeInput) => void;
 };
 
 const IconTextWithTextField: React.VFC<IconTextWithTextFieldProps> = ({
   placeholder,
   parentRef,
+  value,
+  onChange,
   ...iconTextProps
 }) => {
   return (
@@ -38,6 +44,8 @@ const IconTextWithTextField: React.VFC<IconTextWithTextFieldProps> = ({
           parentRef={parentRef}
           size="16px"
           placeholder={placeholder}
+          value={value}
+          onChange={onChange}
         />
       </Wrapper>
     </Paper>

@@ -8,7 +8,13 @@ import Button from "../atoms/Button";
 import Text from "../atoms/Text";
 import Checkbox from "../atoms/Checkbox";
 import CheckboxWithText from "./CheckboxWithText";
-import { disable, secondary, primary, off } from "../../utils/colors";
+import {
+  disable,
+  secondary,
+  primary,
+  off,
+  materialGray,
+} from "../../utils/colors";
 
 import MuiIconButton from "@material-ui/core/IconButton";
 import MuiPaper from "@material-ui/core/Paper";
@@ -245,7 +251,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
         </SettingsWrapper>
         <IconButtonWrapper>
           <MuiIconButton onClick={deleteSettingsRow}>
-            <Icon type="DeleteSweep" color={secondary} />
+            <Icon type="DeleteSweep" color={materialGray} />
           </MuiIconButton>
         </IconButtonWrapper>
       </HorizontalWrapper>

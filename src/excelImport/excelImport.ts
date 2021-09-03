@@ -24,7 +24,9 @@ export const requestToLoogia = async (
   carrierSettingsList: any,
   enableMultiDepot: boolean,
   optionSettingsMap: any,
-  projectDate: Date
+  projectDate: Date,
+  setIsRequesting: any,
+  setShowSuccessSnackbar: any
 ) => {
   const sheet = await getSheetFromExcelFile(excelFile);
   const mapOfColumnNameAndAlphabet = getMapOfColumnNamAndAlphabet(sheet);
@@ -66,5 +68,11 @@ export const requestToLoogia = async (
   const requestBodyJson = JSON.stringify(requestBody);
 
   console.log("requestBody = ", JSON.stringify(requestBody, null, "\t"));
-  request(organization, requestBodyJson, enableMultiDepot);
+  request(
+    organization,
+    requestBodyJson,
+    enableMultiDepot,
+    setIsRequesting,
+    setShowSuccessSnackbar
+  );
 };

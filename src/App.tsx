@@ -14,6 +14,7 @@ import Organizations, {
   initialSelectedOrganization,
   OrganizationsType,
 } from "./components/organisms/Organizations";
+import { initialProjectName } from "./components/organisms/ProjectName";
 import Paper from "./components/atoms/Paper";
 import ExcelImport from "./components/organisms/ExcelImport";
 import ProjectDate from "./components/organisms/ProjectDate";
@@ -23,9 +24,15 @@ import Options, {
 } from "./components/organisms/Options";
 import { requestToLoogia } from "./excelImport/excelImport";
 import Loader from "react-loader-spinner";
+import BackDrop from "@material-ui/core/Backdrop";
+import { loogiaBlue, reactColor } from "./utils/colors";
+import SnackBar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import Text from "./components/atoms/Text";
 
 function App() {
   const enableMultiDepotState = useState(false);
+
   //Organization info
   const organizationListState = useState(
     new Map(initialListOfOrganization as OrganizationsType)
@@ -39,7 +46,7 @@ function App() {
     (depotListState[0] as any).get(selectedDepotNameState[0])?.id ?? "0";
 
   //ProjectName info
-  const projectNameRef = useRef<HTMLInputElement>(null);
+  const projectNameState = useState(initialProjectName);
 
   //ExcelImport info
   const excelImportRef = useRef<HTMLInputElement>(null);
@@ -50,7 +57,7 @@ function App() {
   //Carriers info----------------------------------------------------------------
   const initialCarrierSettings = new Map<string, CarrierSettingsValues>([
     ["isRowChecked", true],
-    ["carrierCount", 10],
+    ["carrierCount", 1],
     ["capacity", 200],
     ["startTime", "09:00"],
     ["endTime", "17:00"],
@@ -90,13 +97,15 @@ function App() {
   );
   const depotList = depotListState[0];
   const selectedDepotNameAsMapkey = selectedDepotNameState[0];
-  const projectName = projectNameRef.current?.value;
   const carreirList = carrierSettingsListState[0];
   const enableMultiDepot = enableMultiDepotState[0];
   const optionMap = optionSettingsMapState[0];
 
   const projectDate = projectDateState[0];
 
+  const [isRequesting, setIsRequesting] = useState(false);
+  const [showSuccessSnackbar, setShowSuccessSnackbar] = useState(false);
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
   return (
     <div style={{ background: "#F4F5F6", padding: "30px 0" }}>
       <Paper elevation={2}>
@@ -109,7 +118,7 @@ function App() {
           depotListState={depotListState}
           selectedDepotNameState={selectedDepotNameState}
         />
-        <ProjectName parentRef={projectNameRef} />
+        <ProjectName projectNameState={projectNameState} />
         <ProjectDate projectDateState={projectDateState} />
         <Carriers
           carrierSettingsListState={carrierSettingsListState}
@@ -118,26 +127,47 @@ function App() {
           enableMultiDepotState={enableMultiDepotState}
           initialCarrierSettings={initialCarrierSettings}
         />
+        <Options optionSettingsMapState={optionSettingsMapState} />
         <RequestFloatButton
           onClick={() => {
             if (!excelImportRef.current?.files?.length) {
               window.alert("Excelファイルを選択して下さい。");
               return;
             }
+            setIsRequesting(true);
             requestToLoogia(
               organization,
               depotList,
               selectedDepotNameAsMapkey,
-              projectNameRef.current?.value,
+              projectNameState[0],
               (excelImportRef as any).current.files[0],
               carreirList,
               enableMultiDepot,
               optionMap,
-              projectDate
+              projectDate,
+              setIsRequesting,
+              setShowSuccessSnackbar
             );
           }}
         />
-        <Options optionSettingsMapState={optionSettingsMapState} />
+        <BackDrop open={isRequesting} style={{ zIndex: 9999 }}>
+          <Loader
+            type="MutatingDots"
+            color={reactColor}
+            width={120}
+            height={120}
+            secondaryColor={reactColor}
+          />
+        </BackDrop>
+        <SnackBar
+          autoHideDuration={2000}
+          open={showSuccessSnackbar}
+          onClose={() => setShowSuccessSnackbar(false)}
+        >
+          <Alert variant="filled" severity="success">
+            <Text weight={700}>Loogiaにリクエストを送信しました。</Text>
+          </Alert>
+        </SnackBar>
       </Paper>
     </div>
   );
