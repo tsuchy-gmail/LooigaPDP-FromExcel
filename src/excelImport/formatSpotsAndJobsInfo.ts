@@ -52,13 +52,15 @@ export const getFormattedSpotsAndJobs: any = (
     columnNameOfAddress: string,
     rowNumber: number
   ) => {
-    const spotName = getCellValue(columnNameOfSpotName, rowNumber);
-    const address = getCellValue(columnNameOfAddress, rowNumber);
     const lat = Number(getCellValue(columnNameOfLat, rowNumber));
     const lng = Number(getCellValue(columnNameOfLng, rowNumber));
+    if (!(lat && lng)) return false;
+
     const travelDuration = Number(
       getCellValue(columnNameOfTravelDuration, rowNumber)
     );
+    const spotName = getCellValue(columnNameOfSpotName, rowNumber);
+    const address = getCellValue(columnNameOfAddress, rowNumber);
 
     const unionOfLatLngAsString = String(lat) + String(lng);
 
@@ -132,6 +134,19 @@ export const getFormattedSpotsAndJobs: any = (
     const rideTimeCost = Number(getCellValue("rideTimeCost", rowNumber));
     const memo = getCellValue("memo", rowNumber);
 
+    const pushTimeWindow = (
+      timeWindowStart: any,
+      timeWindowEnd: any,
+      ranges: any[]
+    ) => {
+      if (timeWindowStart && timeWindowEnd) {
+        ranges.push({
+          readyTime: getISODateFromDateAndTime(projectDate, timeWindowStart),
+          dueTime: getISODateFromDateAndTime(projectDate, timeWindowEnd),
+        });
+      }
+    };
+
     const pSpotId = getSpotIdAndPushSpot(
       "pLat",
       "pLng",
@@ -151,48 +166,41 @@ export const getFormattedSpotsAndJobs: any = (
 
     const job = {
       id: String(rowNumber - 2),
-      pickup: {
-        spotId: pSpotId,
-      },
-      delivery: {
-        spotId: dSpotId,
-      },
     };
 
-    const pRanges: any[] = [];
-    const dRanges: any[] = [];
+    if (pSpotId) {
+      (job as any)["pickup"] = { spotId: pSpotId };
 
-    const pushTimeWindow = (
-      timeWindowStart: any,
-      timeWindowEnd: any,
-      ranges: any[]
-    ) => {
-      if (timeWindowStart && timeWindowEnd) {
-        ranges.push({
-          readyTime: getISODateFromDateAndTime(projectDate, timeWindowStart),
-          dueTime: getISODateFromDateAndTime(projectDate, timeWindowEnd),
-        });
-      }
-    };
+      const pRanges: any[] = [];
+
+      if (pServiceDuration)
+        (job as any)["pickup"]["serviceDuration"] = pServiceDuration * 60;
+
+      pushTimeWindow(pTw1s, pTw1e, pRanges);
+      pushTimeWindow(pTw2s, pTw2e, pRanges);
+      pushTimeWindow(pTw3s, pTw3e, pRanges);
+
+      if (pRanges.length >= 1)
+        (job as any)["pickup"]["timeWindow"] = { ranges: pRanges };
+    }
+    if (dSpotId) {
+      (job as any)["delivery"] = { spotId: dSpotId };
+
+      const dRanges: any[] = [];
+
+      if (dServiceDuration)
+        (job as any)["delivery"]["serviceDuration"] = dServiceDuration * 60;
+
+      pushTimeWindow(dTw1s, dTw1e, dRanges);
+      pushTimeWindow(dTw2s, dTw2e, dRanges);
+      pushTimeWindow(dTw3s, dTw3e, dRanges);
+
+      if (dRanges.length >= 1)
+        (job as any)["delivery"]["timeWindow"] = { ranges: dRanges };
+    }
 
     if (jobName) (job as any)["name"] = jobName;
     if (size) (job as any)["demands"] = [{ dimId: "size", size: size }];
-    if (pServiceDuration)
-      (job as any)["pickup"]["serviceDuration"] = pServiceDuration * 60;
-    if (dServiceDuration)
-      (job as any)["delivery"]["serviceDuration"] = dServiceDuration * 60;
-
-    pushTimeWindow(pTw1s, pTw1e, pRanges);
-    pushTimeWindow(pTw2s, pTw2e, pRanges);
-    pushTimeWindow(pTw3s, pTw3e, pRanges);
-    pushTimeWindow(dTw1s, dTw1e, dRanges);
-    pushTimeWindow(dTw2s, dTw2e, dRanges);
-    pushTimeWindow(dTw3s, dTw3e, dRanges);
-
-    if (pRanges.length >= 1)
-      (job as any)["pickup"]["timeWindow"] = { ranges: pRanges };
-    if (dRanges.length >= 1)
-      (job as any)["delivery"]["timeWindow"] = { ranges: dRanges };
 
     if (skill1) skills.push(skill1);
     if (skill2) skills.push(skill2);
