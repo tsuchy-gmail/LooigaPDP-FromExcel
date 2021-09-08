@@ -26,7 +26,8 @@ export const requestToLoogia = async (
   optionSettingsMap: any,
   projectDate: Date,
   setIsRequesting: any,
-  setShowSuccessSnackbar: any
+  setShowSuccessSnackbar: any,
+  isFlexibleCarrierStartTime: any
 ) => {
   const sheet = await getSheetFromExcelFile(excelFile);
   const mapOfColumnNameAndAlphabet = getMapOfColumnNamAndAlphabet(sheet);
@@ -35,7 +36,8 @@ export const requestToLoogia = async (
   const carriers = getFormattedCarrierSettingsList(
     carrierSettingsList,
     projectDate,
-    enableMultiDepot
+    enableMultiDepot,
+    isFlexibleCarrierStartTime
   );
   const spotsAndJobs = getFormattedSpotsAndJobs(
     sheet,

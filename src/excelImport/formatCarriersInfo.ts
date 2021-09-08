@@ -3,7 +3,8 @@ import { getISODateFromDateAndTime } from "../utils/date";
 export const getFormattedCarrierSettingsList = (
   carrierSettingsList: any,
   projectDate: Date,
-  enableMultiDepot: boolean
+  enableMultiDepot: boolean,
+  isFlexibleCarrierStartTime: boolean
 ) => {
   const carriers = [] as any;
   carrierSettingsList
@@ -85,14 +86,17 @@ export const getFormattedCarrierSettingsList = (
       const skill3 = getSetting("skill3");
       const skill4 = getSetting("skill4");
       const skills = [];
+      const carrierCount = getSetting("carrierCount");
 
-      if (driverId) formattedSettings["driverId"] = driverId;
-      if (vehicleId) formattedSettings["vehicleId"] = vehicleId;
-      if (acceptableLateness)
-        formattedSettings["acceptableLateness"] = acceptableLateness * 60;
-      if (maxTotalWorkingDuration)
+      if (carrierCount === 1 && driverId)
+        formattedSettings["driverId"] = driverId;
+      if (carrierCount === 1 && vehicleId)
+        formattedSettings["vehicleId"] = vehicleId;
+      if (isFlexibleCarrierStartTime && maxTotalWorkingDuration)
         formattedSettings["maxTotalWorkingDuration"] =
           maxTotalWorkingDuration * 60;
+      if (acceptableLateness)
+        formattedSettings["acceptableLateness"] = acceptableLateness * 60;
       if (skill1) skills.push(skill1);
       if (skill2) skills.push(skill2);
       if (skill3) skills.push(skill3);
@@ -100,7 +104,7 @@ export const getFormattedCarrierSettingsList = (
       if (skills.length >= 1 && getSetting("canInputSkills"))
         formattedSettings["skills"] = skills;
 
-      for (let i = 0; i < getSetting("carrierCount"); i++) {
+      for (let i = 0; i < carrierCount; i++) {
         carriers.push({ ...formattedSettings, id: `${index}-${String(i)}` });
       }
     });
