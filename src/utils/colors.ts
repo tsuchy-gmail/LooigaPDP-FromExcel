@@ -9,6 +9,6 @@ export const disable = "#BDBDBD";
 export const materialGray = "#949494";
 
 //favorite
-export const lightBlack = "#333333";
+export const lightBlack = "#4D4D4D";
 export const off = "rgba(200,200,200,0.3)";
 export const reactColor = "#61DAFB";

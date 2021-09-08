@@ -1,10 +1,9 @@
-import { VFC, useState, useEffect } from "react";
+import { VFC, useState } from "react";
 import styled from "styled-components";
 import Select from "../atoms/Select";
 import TextField from "../atoms/TextField";
 import TimePicker from "../atoms/TimePicker";
 import Icon from "../atoms/Icon";
-import IconText from "./IconText";
 import Button from "../atoms/Button";
 import Text from "../atoms/Text";
 import Checkbox from "../atoms/Checkbox";
@@ -38,7 +37,6 @@ const Wrapper = styled.div`
 const HorizontalWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-top: -110px;
 `;
 
 const MainSettingsWrapper = styled.div`
@@ -59,13 +57,6 @@ const BreakTimeWindowTitleWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-left: 1px solid ${lightBlack};
-`;
-
-const RemoveBreakIconButtonWrapper = styled.div`
-  width: 0;
-  position: relative;
-  right: 15px;
 `;
 
 type IsChecked = { isRowChecked: boolean };
@@ -82,28 +73,24 @@ const SettingsWrapper = styled.div`
   }
 `;
 
+const checkboxWrapperHeight = 30;
+const CheckboxWrapper = styled.div`
+  opacity: ${(props: IsChecked) => (props.isRowChecked ? 1 : 0.3)};
+  display: flex;
+  justify-content: flex-end;
+  height: ${checkboxWrapperHeight}px;
+  margin-top: -${checkboxWrapperHeight * 2}px;
+  margin-bottom: ${checkboxWrapperHeight}px;
+  margin-left: 40px;
+`;
+
 const CheckCircleWrapper = styled.div`
   margin-right: 70px;
 `;
 
-const AddRowIconButtonWrapper = styled.div`
-  margin-left: 100px;
+const IconButtonWrapper = styled.div`
+  margin-left: 70px;
   margin-top: -2px;
-`;
-
-const AddSettingTextWrapper = styled.div`
-  width: 50px;
-  text-align: center;
-`;
-const AddSettingsButtonWrapper = styled.div`
-  width: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  bottom: 65px;
-  left: 40px;
-  margin-bottom: 10px;
 `;
 
 //---
@@ -142,6 +129,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
   };
 
   const isRowChecked = carrierSettingsMap.get("isRowChecked") as boolean;
+  const enableBreak = carrierSettingsMap.get("enableBreak") as boolean;
   const canInputSkills = carrierSettingsMap.get("canInputSkills") as boolean;
 
   const carrierCount = carrierSettingsMap.get("carrierCount") as number;
@@ -156,64 +144,22 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
     background: isRowChecked ? "" : off,
   };
 
-  const breakCount = carrierSettingsMap.get("breakCount") as number;
-  const increaseBreakCount = () =>
-    getHandleChangeSettings("breakCount")({
-      target: { value: breakCount + 1 },
-    } as any) as any;
-  const decreaseBreakCount = () =>
-    getHandleChangeSettings("breakCount")({
-      target: { value: breakCount - 1 },
-    } as any) as any;
-
-  const showSkillsSetting = () =>
-    getHandleChangeSettings("canInputSkills")({
-      target: { value: true },
-    } as any);
-  const hideSkillsSetting = () =>
-    getHandleChangeSettings("canInputSkills")({
-      target: { value: false },
-    } as any);
   return (
     <Paper elevation={3} {...paperStyle}>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <div>
-          <AddSettingsButtonWrapper>
-            <MuiIconButton
-              onClick={hideSkillsSetting}
-              disabled={!canInputSkills}
-            >
-              <Icon size="20px" type="RemoveCircleOutline" />
-            </MuiIconButton>
-            <AddSettingTextWrapper>
-              <Text>スキル</Text>
-            </AddSettingTextWrapper>
-            <MuiIconButton
-              onClick={showSkillsSetting}
-              disabled={canInputSkills}
-            >
-              <Icon size="20px" type="AddCircleOutline" />
-            </MuiIconButton>
-          </AddSettingsButtonWrapper>
-          <AddSettingsButtonWrapper>
-            <MuiIconButton
-              onClick={decreaseBreakCount}
-              disabled={breakCount === 0}
-            >
-              <Icon type="RemoveCircleOutline" size="20px" />
-            </MuiIconButton>
-            <AddSettingTextWrapper>
-              <Text>休憩</Text>
-            </AddSettingTextWrapper>
-            <MuiIconButton
-              onClick={increaseBreakCount}
-              disabled={breakCount === 3}
-            >
-              <Icon size="20px" type="AddCircleOutline" />
-            </MuiIconButton>
-          </AddSettingsButtonWrapper>
-        </div>
-      </div>
+      <CheckboxWrapper isRowChecked={isRowChecked}>
+        <CheckboxWithText
+          checked={enableBreak}
+          onChange={getHandleChangeSettings("enableBreak")}
+        >
+          休憩あり
+        </CheckboxWithText>
+        <CheckboxWithText
+          checked={canInputSkills}
+          onChange={getHandleChangeSettings("canInputSkills")}
+        >
+          スキル追加
+        </CheckboxWithText>
+      </CheckboxWrapper>
 
       <HorizontalWrapper>
         <CheckCircleWrapper>
@@ -342,18 +288,18 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
             </MainSettingsWrapper>
           )}
 
-          {breakCount >= 1 && (
+          {carrierSettingsMap.get("enableBreak") && (
             <BreakSettingsWrapper>
               <BreakTimeWindowTitleWrapper width={width}>
-                <Text color={lightBlack}>時間枠 ⓵</Text>
+                <Text color={lightBlack}>休憩 ⓵</Text>
               </BreakTimeWindowTitleWrapper>
               <TimePicker
-                {...getStringValueAndOnChange("breakReadyTime1")}
+                {...getStringValueAndOnChange("breakReadyTime")}
                 width={width}
                 label="休憩開始(可能)"
               />
               <TimePicker
-                {...getStringValueAndOnChange("breakDueTime1")}
+                {...getStringValueAndOnChange("breakDueTime")}
                 width={width}
                 label="休憩終了(可能)"
               />
@@ -367,46 +313,12 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
               />
             </BreakSettingsWrapper>
           )}
-          {breakCount >= 2 && (
-            <BreakSettingsWrapper>
-              <BreakTimeWindowTitleWrapper width={width}>
-                <Text color={lightBlack}>時間枠 ⓶</Text>
-              </BreakTimeWindowTitleWrapper>
-              <TimePicker
-                {...getStringValueAndOnChange("breakReadyTime2")}
-                width={width}
-                label="休憩開始(可能)"
-              />
-              <TimePicker
-                {...getStringValueAndOnChange("breakDueTime2")}
-                width={width}
-                label="休憩終了(可能)"
-              />
-            </BreakSettingsWrapper>
-          )}
-          {breakCount === 3 && (
-            <BreakSettingsWrapper>
-              <BreakTimeWindowTitleWrapper width={width}>
-                <Text color={lightBlack}>時間枠 ⓷</Text>
-              </BreakTimeWindowTitleWrapper>
-              <TimePicker
-                {...getStringValueAndOnChange("breakReadyTime3")}
-                width={width}
-                label="休憩開始(可能)"
-              />
-              <TimePicker
-                {...getStringValueAndOnChange("breakDueTime3")}
-                width={width}
-                label="休憩終了(可能)"
-              />
-            </BreakSettingsWrapper>
-          )}
         </SettingsWrapper>
-        <AddRowIconButtonWrapper>
+        <IconButtonWrapper>
           <MuiIconButton onClick={deleteSettingsRow}>
-            <Icon type="DeleteSweep" size="30px" color={materialGray} />
+            <Icon type="DeleteSweep" color={materialGray} />
           </MuiIconButton>
-        </AddRowIconButtonWrapper>
+        </IconButtonWrapper>
       </HorizontalWrapper>
     </Paper>
   );

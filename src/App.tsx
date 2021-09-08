@@ -61,16 +61,25 @@ function App() {
     ["capacity", 200],
     ["startTime", "09:00"],
     ["endTime", "17:00"],
-    ["enableBreak", false],
-    ["breakReadyTime", "12:00"],
-    ["breakDueTime", "14:00"],
-    ["breakDuration", 60],
+    ["breakCount", 0],
+    ["breakReadyTime1", ""],
+    ["breakDueTime1", ""],
+    ["breakReadyTime2", ""],
+    ["breakDueTime2", ""],
+    ["breakReadyTime3", ""],
+    ["breakDueTime3", ""],
+    ["breakDuration", null],
     ["startDepotId", selectedDepotId],
     ["endDepotId", selectedDepotId],
     ["driverId", ""],
     ["vehicleId", ""],
     ["maxTotalWorkingDuration", null],
     ["acceptableLateness", 0],
+    ["skill1", ""],
+    ["skill2", ""],
+    ["skill3", ""],
+    ["skill4", ""],
+    ["canInputSkills", false],
   ]);
 
   //⬇︎ 一度parseすると["[isRowChecked: true]..."]という配列になる
@@ -101,6 +110,9 @@ function App() {
   const enableMultiDepot = enableMultiDepotState[0];
   const optionMap = optionSettingsMapState[0];
 
+  const isFlexibleCarrierStartTime =
+    optionMap.get("isFlexibleCarrierStartTime")?.checked ?? false;
+
   const projectDate = projectDateState[0];
 
   const [isRequesting, setIsRequesting] = useState(false);
@@ -125,6 +137,7 @@ function App() {
           depotList={depotListState[0]}
           selectedDepotName={selectedDepotNameState[0]}
           enableMultiDepotState={enableMultiDepotState}
+          isFlexibleCarrierStartTime={isFlexibleCarrierStartTime}
           initialCarrierSettings={initialCarrierSettings}
         />
         <Options optionSettingsMapState={optionSettingsMapState} />

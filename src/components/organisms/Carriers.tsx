@@ -56,6 +56,7 @@ type CarriersProps = {
   depotList: DepotsType;
   selectedDepotName: string;
   enableMultiDepotState: UseState<boolean>;
+  isFlexibleCarrierStartTime: boolean;
 };
 
 const Carriers: React.VFC<CarriersProps> = ({
@@ -63,6 +64,7 @@ const Carriers: React.VFC<CarriersProps> = ({
   initialCarrierSettings,
   depotList,
   enableMultiDepotState,
+  isFlexibleCarrierStartTime,
 }) => {
   //---rows for view
   const [carrierSettingsRows, setCarrierSettingsRows] = useState(
@@ -144,11 +146,9 @@ const Carriers: React.VFC<CarriersProps> = ({
       listOfSettingsMap[index].set(settingItem, targetAsInputElement.checked);
       setListOfSettingsMap([...listOfSettingsMap]);
     } else {
-      const newValue = event.target.value;
-      if (typeof newValue === "string" || typeof newValue === "number") {
-        listOfSettingsMap[index].set(settingItem, newValue);
-        setListOfSettingsMap([...listOfSettingsMap]);
-      }
+      const newValue = event.target.value as any;
+      listOfSettingsMap[index].set(settingItem, newValue);
+      setListOfSettingsMap([...listOfSettingsMap]);
     }
   };
   //---
@@ -176,6 +176,7 @@ const Carriers: React.VFC<CarriersProps> = ({
               getHandleChangeSettings={getWrappedHandleChangeSettings(index)}
               depotList={depotList}
               enableMultiDepot={enableMultiDepot}
+              isFlexibleCarrierStartTime={isFlexibleCarrierStartTime}
             />
           ))}
         </CarrierSettingsRowsWrapper>

@@ -17,6 +17,7 @@ export type TextFieldProps = Partial<{
   parentRef: RefObject<HTMLInputElement>;
   value: string;
   onChange: (event: ChangeInput) => void;
+  disabled: boolean;
 }>;
 
 const TextField: VFC<TextFieldProps> = ({
@@ -33,6 +34,7 @@ const TextField: VFC<TextFieldProps> = ({
   parentRef,
   value,
   onChange,
+  disabled,
 }) => {
   const textFieldStyle = {
     width: width ?? "100%",
@@ -74,6 +76,7 @@ const TextField: VFC<TextFieldProps> = ({
         value={valueForDisplay}
         onChange={handleChangeValueForDisplay}
         onBlur={onChange as any}
+        disabled={disabled}
       />
     </div>
   );

@@ -37,16 +37,13 @@ export const requestToLoogia = async (
     projectDate,
     enableMultiDepot
   );
-  const spots = getFormattedSpotsAndJobs(
+  const spotsAndJobs = getFormattedSpotsAndJobs(
     sheet,
     mapOfColumnNameAndAlphabet,
     projectDate
-  ).get("spots");
-  const jobs = getFormattedSpotsAndJobs(
-    sheet,
-    mapOfColumnNameAndAlphabet,
-    projectDate
-  ).get("jobs");
+  );
+  const spots = spotsAndJobs.get("spots");
+  const jobs = spotsAndJobs.get("jobs");
   const option = getFormattedOptions(optionSettingsMap);
 
   const requestBody = {

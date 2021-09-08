@@ -8,24 +8,35 @@
 
 import { getISODateFromDateAndTime } from "../utils/date";
 
-export const getFormattedSpotsAndJobs = (
+export const getFormattedSpotsAndJobs: any = (
   sheet: any,
   mapOfColumnNameAndAlphabet: any,
   projectDate: Date
 ) => {
-  const numberOfSheetRows = Number(sheet["!ref"].replace(/..../, ""));
+  const rowNumberFromRefData = Number(sheet["!ref"].replace(/^...../, ""));
+  if (!rowNumberFromRefData)
+    return window.alert("エクセルの形式に誤りがあります。");
 
   const getAlphabet = (columnName: any) =>
     mapOfColumnNameAndAlphabet.get(columnName);
-  const getCellValue = (
-    columnName: string,
-    rowNumber: number,
-    character: string
-  ) => {
+  const getCellValue = (columnName: string, rowNumber: number) => {
     const cell = sheet[getAlphabet(columnName) + String(rowNumber)];
-    if (cell) return cell[character];
-    else return null;
+    return cell ? String(cell["w"]).trim() : null;
   };
+
+  const getNumberOfSheetRows = (rowNumberFromRefData: number) => {
+    for (let i = 2; i < rowNumberFromRefData + 2 - 1; i++) {
+      const pLat = getCellValue("pLat", i);
+      const pLng = getCellValue("pLng", i);
+      const dLat = getCellValue("dLat", i);
+      const dLng = getCellValue("dLng", i);
+
+      const latOrLngExist = (pLat && pLng) || (dLat && dLng);
+      if (!latOrLngExist) return i - 1;
+    }
+    return rowNumberFromRefData;
+  };
+  const numberOfSheetRows = getNumberOfSheetRows(rowNumberFromRefData);
 
   const mapOfLatLngUnion = new Map();
   const spotList = [] as any;
@@ -36,14 +47,18 @@ export const getFormattedSpotsAndJobs = (
   const getSpotIdAndPushSpot = (
     columnNameOfLat: string,
     columnNameOfLng: string,
+    columnNameOfTravelDuration: string,
     columnNameOfSpotName: string,
     columnNameOfAddress: string,
     rowNumber: number
   ) => {
-    const spotName = getCellValue(columnNameOfSpotName, rowNumber, "v");
-    const address = getCellValue(columnNameOfAddress, rowNumber, "v");
-    const lat = getCellValue(columnNameOfLat, rowNumber, "v");
-    const lng = getCellValue(columnNameOfLng, rowNumber, "v");
+    const spotName = getCellValue(columnNameOfSpotName, rowNumber);
+    const address = getCellValue(columnNameOfAddress, rowNumber);
+    const lat = Number(getCellValue(columnNameOfLat, rowNumber));
+    const lng = Number(getCellValue(columnNameOfLng, rowNumber));
+    const travelDuration = Number(
+      getCellValue(columnNameOfTravelDuration, rowNumber)
+    );
 
     const unionOfLatLngAsString = String(lat) + String(lng);
 
@@ -71,6 +86,9 @@ export const getFormattedSpotsAndJobs = (
       };
       if (spotName) (spot as any)["name"] = spotName;
       if (address) (spot as any)["address"] = { address1: address };
+      if (travelDuration)
+        (spot as any)["guidanceLocations"][0]["travelDuration"] =
+          travelDuration * 60;
 
       spotList.push(spot);
 
@@ -85,26 +103,39 @@ export const getFormattedSpotsAndJobs = (
 
   //2行目から必要な情報 1行目は必要ないためrowの数から1を引く
   for (let rowNumber = 2; rowNumber < numberOfSheetRows + 2 - 1; rowNumber++) {
-    const jobName = getCellValue("jobName", rowNumber, "v");
-    const size = getCellValue("size", rowNumber, "v");
-    const pServiceDuration = getCellValue("pServiceDuration", rowNumber, "v");
-    const dServiceDuration = getCellValue("dServiceDuration", rowNumber, "v");
-    const pTw1s = getCellValue("pTw1s", rowNumber, "w");
-    const pTw1e = getCellValue("pTw1e", rowNumber, "w");
-    const dTw1s = getCellValue("dTw1s", rowNumber, "w");
-    const dTw1e = getCellValue("dTw1e", rowNumber, "w");
-    const pTw2s = getCellValue("pTw2s", rowNumber, "w");
-    const pTw2e = getCellValue("pTw2e", rowNumber, "w");
-    const dTw2s = getCellValue("dTw2s", rowNumber, "w");
-    const dTw2e = getCellValue("dTw2e", rowNumber, "w");
-    const pTw3s = getCellValue("pTw3s", rowNumber, "w");
-    const pTw3e = getCellValue("pTw3e", rowNumber, "w");
-    const dTw3s = getCellValue("dTw3s", rowNumber, "w");
-    const dTw3e = getCellValue("dTw3e", rowNumber, "w");
+    const jobName = getCellValue("jobName", rowNumber);
+    const size = Number(getCellValue("size", rowNumber));
+    const pServiceDuration = Number(
+      getCellValue("pServiceDuration", rowNumber)
+    );
+    const dServiceDuration = Number(
+      getCellValue("dServiceDuration", rowNumber)
+    );
+    const pTw1s = getCellValue("pTw1s", rowNumber);
+    const pTw1e = getCellValue("pTw1e", rowNumber);
+    const dTw1s = getCellValue("dTw1s", rowNumber);
+    const dTw1e = getCellValue("dTw1e", rowNumber);
+    const pTw2s = getCellValue("pTw2s", rowNumber);
+    const pTw2e = getCellValue("pTw2e", rowNumber);
+    const dTw2s = getCellValue("dTw2s", rowNumber);
+    const dTw2e = getCellValue("dTw2e", rowNumber);
+    const pTw3s = getCellValue("pTw3s", rowNumber);
+    const pTw3e = getCellValue("pTw3e", rowNumber);
+    const dTw3s = getCellValue("dTw3s", rowNumber);
+    const dTw3e = getCellValue("dTw3e", rowNumber);
+    const skill1 = getCellValue("skill1", rowNumber);
+    const skill2 = getCellValue("skill2", rowNumber);
+    const skill3 = getCellValue("skill3", rowNumber);
+    const skill4 = getCellValue("skill4", rowNumber);
+    const skills = [];
+    const priority = Number(getCellValue("priority", rowNumber));
+    const rideTimeCost = Number(getCellValue("rideTimeCost", rowNumber));
+    const memo = getCellValue("memo", rowNumber);
 
     const pSpotId = getSpotIdAndPushSpot(
       "pLat",
       "pLng",
+      "pTravelDuration",
       "pName",
       "pAddress",
       rowNumber
@@ -112,6 +143,7 @@ export const getFormattedSpotsAndJobs = (
     const dSpotId = getSpotIdAndPushSpot(
       "dLat",
       "dLng",
+      "dTravelDuration",
       "dName",
       "dAddress",
       rowNumber
@@ -161,6 +193,15 @@ export const getFormattedSpotsAndJobs = (
       (job as any)["pickup"]["timeWindow"] = { ranges: pRanges };
     if (dRanges.length >= 1)
       (job as any)["delivery"]["timeWindow"] = { ranges: dRanges };
+
+    if (skill1) skills.push(skill1);
+    if (skill2) skills.push(skill2);
+    if (skill3) skills.push(skill3);
+    if (skill4) skills.push(skill4);
+    if (skills.length >= 1) (job as any)["skills"] = skills;
+    if (priority) (job as any)["priority"] = priority;
+    if (rideTimeCost) (job as any)["rideTimeCost"] = rideTimeCost;
+    if (memo) (job as any)["memo"] = memo;
 
     jobList.push(job);
   }

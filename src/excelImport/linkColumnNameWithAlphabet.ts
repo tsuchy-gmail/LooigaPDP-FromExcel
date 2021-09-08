@@ -5,10 +5,16 @@ export const getMapOfColumnNamAndAlphabet = (sheet: any) => {
   const mapOfColumnNameAndAlphabet = new Map();
 
   //A~Z 計26文字
-  for (let i = 0; i < 26; i++) {
-    const oneOfAlphabet = String.fromCodePoint(65 + i); //A~Z
-    const columnTop = sheet[oneOfAlphabet + "1"];
+  for (let i = 0; i < 52; i++) {
+    let oneOfAlphabet = "";
 
+    if (i < 26) {
+      oneOfAlphabet = String.fromCodePoint(65 + i); //A~Z
+    } else {
+      oneOfAlphabet = "A" + String.fromCodePoint(65 + i - 26); //AA~AZ
+    }
+
+    const columnTop = sheet[oneOfAlphabet + "1"];
     const setToMap = (camelCaseOfColumnName: string) => {
       mapOfColumnNameAndAlphabet.set(camelCaseOfColumnName, oneOfAlphabet);
     };
@@ -92,6 +98,28 @@ export const getMapOfColumnNamAndAlphabet = (sheet: any) => {
           break;
         case "size":
           setToMap("size");
+          break;
+        case "skill1":
+          setToMap("skill1");
+          break;
+        case "skill2":
+          setToMap("skill2");
+          break;
+        case "skill3":
+          setToMap("skill3");
+          break;
+        case "skill4":
+          setToMap("skill4");
+          break;
+        case "priority":
+          setToMap("priority");
+          break;
+        case "ride_time_cost":
+          setToMap("rideTimeCost");
+          break;
+        case "memo":
+          setToMap("memo");
+          break;
       }
     }
   }

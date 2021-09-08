@@ -5,7 +5,6 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { lightBlack } from "../../utils/colors";
 
 type DatePickerProps = {
   size?: string;
