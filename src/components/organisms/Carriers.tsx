@@ -104,6 +104,15 @@ const Carriers: React.VFC<CarriersProps> = ({
       new Map(initialCarrierSettings),
     ]);
   };
+  const duplicateCarrierSettings = (
+    carrierSettings: Map<string, CarrierSettingsValues>
+  ) => {
+    setCarrierSettingsRows((currentRows) => [
+      ...currentRows,
+      CarrierSettingsRow,
+    ]);
+    setListOfSettingsMap([...listOfSettingsMap, new Map(carrierSettings)]);
+  };
 
   const deleteSettingsMap = (index: number) => {
     listOfSettingsMap.splice(index, 1);
@@ -177,6 +186,7 @@ const Carriers: React.VFC<CarriersProps> = ({
               depotList={depotList}
               enableMultiDepot={enableMultiDepot}
               isFlexibleCarrierStartTime={isFlexibleCarrierStartTime}
+              duplicateCarrierSettings={duplicateCarrierSettings}
             />
           ))}
         </CarrierSettingsRowsWrapper>

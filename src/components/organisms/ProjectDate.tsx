@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 `;
 
 const DatePickerWrapper = styled.div`
-  width: 180px;
+  width: 155px;
   margin: 0 auto;
 `;
 
@@ -36,7 +36,7 @@ const ProjectDate: React.VFC<ProjectDateProps> = ({ projectDateState }) => {
   return (
     <Paper>
       <Wrapper>
-        <IconText type="Schedule" text="Date" />
+        <IconText type="Event" text="Date" />
         <DatePickerWrapper>
           <DatePicker
             value={projectDate}

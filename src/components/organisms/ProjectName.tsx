@@ -5,9 +5,11 @@ import { current } from "../../utils/date";
 import { UseState, ChangeInput } from "../../utils/types";
 import IconTextWithTextField from "../molecules/IconTextWithTextField";
 
+const currentDate = `${current.monthDate}のプロジェクト`;
+
 export const initialProjectName = localStorage.projectName
   ? JSON.parse(localStorage.projectName)
-  : "";
+  : currentDate;
 
 type ProjectNameProps = {
   projectNameState: UseState<string>;
@@ -27,7 +29,7 @@ const ProjectName: React.VFC<ProjectNameProps> = ({ projectNameState }) => {
     <IconTextWithTextField
       type="LabelImportant"
       text="Project Name"
-      placeholder={`${current.monthDate}のプロジェクト`}
+      placeholder={currentDate}
       value={projectName}
       onChange={handleChangeProjectName}
     />

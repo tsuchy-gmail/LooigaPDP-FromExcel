@@ -6,6 +6,8 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 
+import Icon from "./Icon";
+
 type DatePickerProps = {
   size?: string;
   weight?: number;
@@ -44,6 +46,7 @@ const MyDatePicker: React.VFC<DatePickerProps> = ({
         onChange={onChange}
         format="yyyy-MM-dd"
         InputProps={inputProps}
+        keyboardIcon={<Icon type="Settings" />}
       />
     </MuiPickersUtilsProvider>
   );

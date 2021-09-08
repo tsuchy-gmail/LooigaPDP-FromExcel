@@ -106,6 +106,14 @@ const AddSettingsButtonWrapper = styled.div`
   margin-bottom: 10px;
 `;
 
+const DuplicateButtonWrapper = styled.div`
+  width: 100px;
+  height: 0;
+  position: relative;
+  top: -55px;
+  left: -15px;
+`;
+
 //---
 
 type CarrierSettingsRowProps = {
@@ -117,6 +125,9 @@ type CarrierSettingsRowProps = {
   depotList: DepotsType;
   enableMultiDepot: boolean;
   isFlexibleCarrierStartTime: boolean;
+  duplicateCarrierSettings: (
+    carrierSettings: Map<string, CarrierSettingsValues>
+  ) => void;
 };
 
 const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
@@ -126,6 +137,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
   depotList,
   enableMultiDepot,
   isFlexibleCarrierStartTime,
+  duplicateCarrierSettings,
 }) => {
   //---util
   const carrierCountOptions = [...new Array(50).keys()].map(
@@ -176,6 +188,14 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
     } as any);
   return (
     <Paper elevation={3} {...paperStyle}>
+      <DuplicateButtonWrapper>
+        <Button
+          variant="outlined"
+          onClick={() => duplicateCarrierSettings(carrierSettingsMap)}
+        >
+          <IconText type="ControlPointDuplicate" text="複製" />
+        </Button>
+      </DuplicateButtonWrapper>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <div>
           <AddSettingsButtonWrapper>
