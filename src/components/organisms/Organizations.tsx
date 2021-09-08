@@ -5,7 +5,6 @@ import styled from "styled-components";
 import IconTextWithSelect from "../molecules/IconTextWithSelect";
 import TextField from "../atoms/TextField";
 import Select from "../atoms/Select";
-import { tsuchyDev } from "../../organizationsData";
 import {
   SetState,
   UseState,
@@ -55,12 +54,7 @@ const validateNewOrganization: OrganizationValidation = (
 
 export const initialListOfOrganization = localStorage.organizationList
   ? new Map(JSON.parse(localStorage.organizationList))
-  : new Map([
-      [
-        "dev",
-        { name: "dev", AppID: tsuchyDev.AppID, ApiKey: tsuchyDev.ApiKey },
-      ],
-    ]);
+  : null;
 
 export const initialSelectedOrganization = localStorage.selectedOrganization
   ? JSON.parse(localStorage.selectedOrganization)

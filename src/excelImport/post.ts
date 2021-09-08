@@ -23,7 +23,7 @@ export const request = async (
     ? "https://dev.loogia.tech/api/v0/multiDepotProjects"
     : "https://dev.loogia.tech/api/v0/projects";
 
-  const isOrganizationDev = organization.name === "dev"; //最終的にはdevもこの設定も消す
+  const isOrganizationDev = organization.name.slice(-4) === "-DEV";
 
   try {
     const response = await axios.post(

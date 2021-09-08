@@ -66,7 +66,11 @@ export const requestToLoogia = async (
 
   const requestBodyJson = JSON.stringify(requestBody);
 
-  console.log("requestBody = ", JSON.stringify(requestBody, null, "\t"));
+  console.log("organization = ", organization);
+  console.log("carriers = ", carriers);
+  console.log("spots = ", spots);
+  console.log("jobs = ", jobs);
+  console.log("option = ", option);
   request(
     organization,
     requestBodyJson,
