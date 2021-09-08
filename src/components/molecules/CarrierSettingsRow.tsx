@@ -96,6 +96,8 @@ const AddSettingTextWrapper = styled.div`
   text-align: center;
 `;
 const AddSettingsButtonWrapper = styled.div`
+  opacity: ${(props: { isRowChecked: boolean }) =>
+    props.isRowChecked ? 1 : 0.3};
   width: 180px;
   display: flex;
   align-items: center;
@@ -107,6 +109,8 @@ const AddSettingsButtonWrapper = styled.div`
 `;
 
 const DuplicateButtonWrapper = styled.div`
+  opacity: ${(props: { isRowChecked: boolean }) =>
+    props.isRowChecked ? 1.0 : 0.3};
   width: 100px;
   height: 0;
   position: relative;
@@ -188,7 +192,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
     } as any);
   return (
     <Paper elevation={3} {...paperStyle}>
-      <DuplicateButtonWrapper>
+      <DuplicateButtonWrapper isRowChecked={isRowChecked}>
         <Button
           variant="outlined"
           onClick={() => duplicateCarrierSettings(carrierSettingsMap)}
@@ -198,7 +202,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
       </DuplicateButtonWrapper>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <div>
-          <AddSettingsButtonWrapper>
+          <AddSettingsButtonWrapper isRowChecked={isRowChecked}>
             <MuiIconButton
               onClick={hideSkillsSetting}
               disabled={!canInputSkills}
@@ -215,7 +219,7 @@ const CarrierSettingsRow: VFC<CarrierSettingsRowProps> = ({
               <Icon size="20px" type="AddCircleOutline" />
             </MuiIconButton>
           </AddSettingsButtonWrapper>
-          <AddSettingsButtonWrapper>
+          <AddSettingsButtonWrapper isRowChecked={isRowChecked}>
             <MuiIconButton
               onClick={decreaseBreakCount}
               disabled={breakCount === 0}
